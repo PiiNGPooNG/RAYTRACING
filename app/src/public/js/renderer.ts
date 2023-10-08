@@ -2,11 +2,17 @@ export class Canvas {
     #canvas: HTMLCanvasElement;
     #ctx: CanvasRenderingContext2D;
 
-    constructor(canvas: HTMLCanvasElement, width: number, height: number) {
+    #depth: number;
+    #background: Color;
+
+    constructor(canvas: HTMLCanvasElement, width: number, height: number, depth: number, background: Color) {
         this.#canvas = canvas;
+        this.#ctx = canvas.getContext("2d");
         canvas.width = width;
         canvas.height = height;
-        this.#ctx = canvas.getContext("2d");
+        this.#depth = depth;
+        this.#background = background;
+        this.fill(background);
     }
 
     size(width: number, height: number) {
@@ -22,6 +28,13 @@ export class Canvas {
     pixel(x: number, y: number, color: Color) {
         this.#ctx.fillStyle = color.rgb;
         this.#ctx.fillRect(x, y, 1, 1);
+    }
+
+    depthPixel(x: number, y: number, z: number, color: Color) {
+        let t = z / this.#depth;
+        t = Math.min(1, Math.max(0, t));
+        let depthColor = Color.interpolate(color, this.#background, t);
+        this.pixel(x, y, depthColor);
     }
 
     get width() {
@@ -58,6 +71,14 @@ export class Color {
 
     get rgb() {
         return `rgb(${this.#r}, ${this.#g}, ${this.#b})`;
+    }
+
+    static interpolate(color1: Color, color2: Color, t: number): Color {
+        return new Color(
+            (1 - t) * color1.#r + t * color2.#r,
+            (1 - t) * color1.#g + t * color2.#g,
+            (1 - t) * color1.#b + t * color2.#b
+        )
     }
 }
 

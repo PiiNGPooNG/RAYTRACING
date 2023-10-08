@@ -2,7 +2,7 @@ import {Canvas, Color, Vector3, Triangle, Ray} from "./renderer.js";
 
 let canvasEl = document.querySelector("canvas");
 
-let canvas = new Canvas(canvasEl, 500, 500);
+let canvas = new Canvas(canvasEl, 500, 500, 300, new Color(255, 255, 255));
 
 let triangles = [];
 
@@ -29,7 +29,7 @@ for (let x = 0; x < canvas.width; x++) {
         let intersection = ray.intersection;
         if (intersection) {
             let color = ray.intersectedTriangle.color;
-            canvas.pixel(x, y, color);
+            canvas.depthPixel(x, y, ray.intersection.z, color);
         }
     }
 }
