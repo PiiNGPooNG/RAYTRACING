@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+
+  nodejs:
+    image: node:18.14
+    restart: always
+    working_dir: /var/www
+    volumes:
+      - ./app:/var/www
+    ports:
+      - "80:3000"
+    environment:
+      - NODE_ENV=production
+    command: "npm run dev"
