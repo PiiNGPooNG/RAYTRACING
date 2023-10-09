@@ -52,24 +52,24 @@ export class Color {
     #b: number;
 
     constructor(r: number, g: number, b: number) {
-        this.#r = r;
-        this.#g = g;
-        this.#b = b;
+        this.#r = Math.min(255, Math.max(0, r));
+        this.#g = Math.min(255, Math.max(0, g));
+        this.#b = Math.min(255, Math.max(0, b));
     }
 
-    get r() {
+    get r(): number {
         return this.#r;
     }
 
-    get g() {
+    get g(): number {
         return this.#g;
     }
 
-    get b() {
+    get b(): number {
         return this.#b;
     }
 
-    get rgb() {
+    get rgb(): string {
         return `rgb(${this.#r}, ${this.#g}, ${this.#b})`;
     }
 
