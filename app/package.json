@@ -21,6 +21,7 @@
     "typescript": "^5.2.2"
   },
   "nodemonConfig": {
-    "ext": "js,hbs"
+    "ext": "js,hbs",
+    "delay": 200
   }
 }

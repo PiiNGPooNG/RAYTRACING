@@ -10,7 +10,14 @@ const app = express();
 app.engine(".hbs", engine({extname: '.hbs'}));
 app.set('view engine', ".hbs");
 app.set('views', './views')
-app.use(express.static(path.join(__dirname, "public")));
+app.use(
+    (_req, res, next) => {
+        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+        return next();
+    },
+    express.static(path.join(__dirname, "public"))
+);
 
 app.get('/', (req, res) => {
     res.render("index");

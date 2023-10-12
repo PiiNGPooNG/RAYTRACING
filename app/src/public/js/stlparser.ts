@@ -1,4 +1,6 @@
-import {Color, Triangle, Vector3} from "./renderer.js";
+import Vector3 from "./Vector3.js";
+import Color from "./Color.js";
+import Triangle from "./Triangle.js";
 
 export async function stlFileToText(filename: string): Promise<string> {
     let file = await fetch(filename);
