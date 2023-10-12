@@ -29,4 +29,10 @@ export default class Triangle {
     get color(): Color {
         return this.#color;
     }
+
+    translate(translation: Vector3): void {
+        this.#A.add(translation);
+        this.#B.add(translation);
+        this.#C.add(translation)
+    }
 }

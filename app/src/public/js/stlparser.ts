@@ -17,7 +17,7 @@ export async function stlFileToText(filename: string): Promise<string> {
     });
 }
 
-export function stlTextToTriangles(text: string, shift: Vector3): Array<Triangle> {
+export function stlTextToTriangles(text: string): Array<Triangle> {
     let triangles: Array<Triangle> = [];
     let facets = text.match(/facet\s+normal(?:\s+[-+]?[0-9]+\.[0-9]+){3}\s+outer\s+loop\s+(?:vertex(?:\s+[-+]?[0-9]+\.[0-9]+){3}\s+){3}endloop\s+endfacet\s+/g);
     facets.forEach((facet) => {
@@ -27,14 +27,14 @@ export function stlTextToTriangles(text: string, shift: Vector3): Array<Triangle
         let vectors = [];
         for (const vertex of vertices) {
             let vector = new Vector3(parseFloat(vertex[1]), parseFloat(vertex[2]), parseFloat(vertex[3]));
-            vectors.push(vector.add(shift));
+            vectors.push(vector);
         }
         triangles.push(new Triangle(vectors[0], vectors[1], vectors[2], new Color(255, 0, 0)));
     });
     return triangles;
 }
 
-export async function stlFileToTriangles(filename: string, shift: Vector3) {
+export async function stlFileToTriangles(filename: string) {
     let text = await stlFileToText(filename);
-    return stlTextToTriangles(text, shift);
+    return stlTextToTriangles(text);
 }
