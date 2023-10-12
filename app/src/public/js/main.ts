@@ -11,14 +11,21 @@ const sharedBuffer = new SharedArrayBuffer(width * height * 4);
 const imageData = ctx.getImageData(0, 0, width, height);
 const pixels = new Uint8ClampedArray(sharedBuffer);
 
-const worker = new Worker("/js/worker.js", {type: "module"});
-worker.postMessage({
-    x: 0,
-    y: 0,
-    width: width,
-    height: height,
-    buffer: sharedBuffer
-})
+const workerAmount = 6;
+const workers: Array<Worker> = [];
+for (let i = 0; i < workerAmount; i++) {
+    const worker = new Worker("/js/worker.js", {type: "module"});
+    worker.postMessage({
+        x: 0,
+        y: 0,
+        width: width,
+        height: height,
+        buffer: sharedBuffer,
+        gap: workerAmount,
+        offset: i,
+    })
+    workers.push(worker);
+}
 
 function draw() {
     imageData.data.set(pixels);

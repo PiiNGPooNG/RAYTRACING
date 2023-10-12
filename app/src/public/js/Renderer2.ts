@@ -45,8 +45,8 @@ export default class Renderer2 {
         return this.#height;
     }
 
-    render(startX: number, startY: number, width: number, height: number) {
-        for (let x = startX; x < startX + width; x++) {
+    render(startX: number, startY: number, width: number, height: number, gap: number, offset: number) {
+        for (let x = startX + offset; x < startX + width; x += gap) {
             for (let y = startY; y < startY + height; y++) {
                 let ray = new Ray(new Vector3(x, y, -10000), new Vector3(0, 0 ,1));
                 this.#triangles.forEach((triangle) => {
