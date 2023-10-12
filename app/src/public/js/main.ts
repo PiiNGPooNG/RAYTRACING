@@ -11,20 +11,47 @@ const sharedBuffer = new SharedArrayBuffer(width * height * 4);
 const imageData = ctx.getImageData(0, 0, width, height);
 const pixels = new Uint8ClampedArray(sharedBuffer);
 
+interface Job {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
+const jobs: Array<Job> = [];
+
+for (let x = 0; x < width; x += 60) {
+    for (let y = 0; y < height; y += 60) {
+        jobs.push({
+            x: x,
+            y: y,
+            width: Math.min(60, width - x),
+            height: Math.min(60, height - y)
+        });
+    }
+}
+
 const workerAmount = 6;
 const workers: Array<Worker> = [];
 for (let i = 0; i < workerAmount; i++) {
     const worker = new Worker("/js/worker.js", {type: "module"});
     worker.postMessage({
-        x: 0,
-        y: 0,
-        width: width,
-        height: height,
-        buffer: sharedBuffer,
-        gap: workerAmount,
-        offset: i,
-    })
+        type: "setup",
+        buffer: sharedBuffer
+    });
     workers.push(worker);
+    worker.addEventListener("message", (message) => {
+        giveJob(worker);
+    });
+}
+
+function giveJob(worker: Worker) {
+    let job = jobs.pop();
+    const message = {
+        type: "render",
+        ...job
+    };
+    worker.postMessage(message);
 }
 
 function draw() {

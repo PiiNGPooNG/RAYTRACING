@@ -2,14 +2,15 @@ import Color from "./Color.js";
 import Ray from "./Ray.js";
 import Vector3 from "./Vector3.js";
 import Triangle from "./Triangle.js";
+import Scene from "./Scene.js";
 
-export default class Renderer2 {
+export default class Renderer {
     #width: number;
     #height: number;
     #depth: number;
     #pixels: Uint8ClampedArray;
 
-    #triangles: Array<Triangle> = [];
+    #scene: Scene;
 
     constructor(width: number, height: number, depth: number, buffer: SharedArrayBuffer) {
         this.#width = width;
@@ -18,8 +19,8 @@ export default class Renderer2 {
         this.#pixels = new Uint8ClampedArray(buffer);
     }
 
-    addTriangles(triangles: Array<Triangle>) {
-        this.#triangles.push(...triangles);
+    setScene(scene: Scene) {
+        this.#scene = scene;
     }
 
     pixel(x: number, y: number, color: Color): void {
@@ -45,12 +46,16 @@ export default class Renderer2 {
         return this.#height;
     }
 
-    render(startX: number, startY: number, width: number, height: number, gap: number, offset: number) {
-        for (let x = startX + offset; x < startX + width; x += gap) {
+    render(startX: number, startY: number, width: number, height: number) {
+        const camera = this.#scene.camera;
+        const meshes = this.#scene.meshes;
+        for (let x = startX; x < startX + width; x++) {
             for (let y = startY; y < startY + height; y++) {
-                let ray = new Ray(new Vector3(x, y, -10000), new Vector3(0, 0 ,1));
-                this.#triangles.forEach((triangle) => {
-                    ray.calcIntersection(triangle);
+                let ray = new Ray(camera.origin.add(new Vector3(x, y, 0)), camera.direction);
+                meshes.forEach((mesh) => {
+                    mesh.triangles.forEach((triangle) => {
+                       ray.calcIntersection(triangle);
+                    });
                 });
                 let intersection = ray.intersection;
                 if (intersection) {

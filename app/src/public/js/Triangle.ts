@@ -31,8 +31,8 @@ export default class Triangle {
     }
 
     translate(translation: Vector3): void {
-        this.#A.add(translation);
-        this.#B.add(translation);
-        this.#C.add(translation)
+        this.#A = this.#A.add(translation);
+        this.#B = this.#B.add(translation);
+        this.#C = this.#C.add(translation)
     }
 }
