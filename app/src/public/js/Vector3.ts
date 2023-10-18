@@ -9,6 +9,10 @@ export default class Vector3 {
         this.#z = z;
     }
 
+    static fromArray(array: Array<number>): Vector3 {
+        return new Vector3(array[0], array[1], array[2]);
+    }
+
     get x(): number {
         return this.#x;
     }

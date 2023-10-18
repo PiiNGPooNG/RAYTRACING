@@ -51,7 +51,7 @@ export default class Renderer {
         const meshes = this.#scene.meshes;
         for (let x = startX; x < startX + width; x++) {
             for (let y = startY; y < startY + height; y++) {
-                let ray = new Ray(camera.origin.add(new Vector3(x, y, 0)), camera.direction);
+                let ray = new Ray(camera.origin.add(new Vector3(x/150, y/150, 0)), camera.direction);
                 meshes.forEach((mesh) => {
                     mesh.triangles.forEach((triangle) => {
                        ray.calcIntersection(triangle);

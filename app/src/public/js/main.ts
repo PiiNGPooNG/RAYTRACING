@@ -1,4 +1,8 @@
 import Job from './Job';
+import ColladaReader from "./ColladaReader.js";
+
+let reader = new ColladaReader();
+await reader.open("/3d/cyndaquil.dae");
 
 const width = 500;
 const height = 500;
@@ -41,6 +45,7 @@ for (let i = 0; i < workerAmount; i++) {
     const worker = new Worker("/js/worker.js", {type: "module"});
     worker.postMessage({
         type: "setup",
+        scene: reader.scene,
         buffer: sharedBuffer
     });
     workers.push(worker);

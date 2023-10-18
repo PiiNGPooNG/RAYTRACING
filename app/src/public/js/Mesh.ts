@@ -1,5 +1,4 @@
 import Triangle from "./Triangle.js";
-import {stlFileToTriangles} from "./stlparser.js";
 import Vector3 from "./Vector3.js";
 
 export default class Mesh {
@@ -17,18 +16,12 @@ export default class Mesh {
         this.#triangles.push(...triangles);
     }
 
-    static async fromFile(filename: string): Promise<Mesh> {
-        return new Promise(async function (resolve) {
-            const mesh = new Mesh(await stlFileToTriangles(filename));
-            resolve(mesh);
-        });
-    }
-
     translate(translation: Vector3): void {
         this.#triangles.forEach((triangle) => {
             triangle.translate(translation);
         });
     }
+
 
     get triangles(): Array<Triangle> {
         return this.#triangles;
