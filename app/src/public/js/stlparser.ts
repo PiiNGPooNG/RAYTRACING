@@ -29,7 +29,7 @@ export function stlTextToTriangles(text: string): Array<Triangle> {
             let vector = new Vector3(parseFloat(vertex[1]), parseFloat(vertex[2]), parseFloat(vertex[3]));
             vectors.push(vector);
         }
-        triangles.push(new Triangle(vectors[0], vectors[1], vectors[2], new Color(255, 0, 0)));
+        triangles.push(new Triangle(vectors[0], vectors[1], vectors[2], new Color(245, 198, 137)));
     });
     return triangles;
 }

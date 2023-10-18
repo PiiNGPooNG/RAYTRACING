@@ -15,10 +15,10 @@ async function setup(buffer: SharedArrayBuffer) {
             new Vector3(0, 0, 1)
         )
     );
-    let mesh = await Mesh.fromFile('/3d/wuerfel.stl');
+    let mesh = await Mesh.fromFile('/3d/cyndaquil.stl');
     mesh.translate(new Vector3(250, 250, 180));
     scene.addMesh(mesh);
-    renderer = new Renderer(500, 500, 500, buffer);
+    renderer = new Renderer(500, 500, 300, buffer);
     renderer.setScene(scene);
 }
 
