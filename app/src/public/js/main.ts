@@ -2,7 +2,7 @@ import Job from './Job';
 import ColladaReader from "./ColladaReader.js";
 
 let reader = new ColladaReader();
-await reader.open("/3d/cyndaquil.dae");
+await reader.open("/3d/cube-scene.dae");
 
 const width = 500;
 const height = 500;

@@ -7,6 +7,7 @@ import Job from "./Job";
 import {SceneDto} from "./SceneDto";
 import Triangle from "./Triangle.js";
 import Color from "./Color.js";
+import * as wasi from "wasi";
 
 let renderer: Renderer;
 let scene: Scene;
@@ -23,11 +24,12 @@ async function setup(sceneDto: SceneDto, buffer: SharedArrayBuffer) {
     sceneDto.meshes.forEach((meshDto) => {
         let triangles: Array<Triangle> = [];
         meshDto.forEach((triangleDto) => {
+            let material = sceneDto.materials[triangleDto.material];
             let triangle = new Triangle(
                 new Vector3(triangleDto.vertices[0].x, triangleDto.vertices[0].y, triangleDto.vertices[0].z),
                 new Vector3(triangleDto.vertices[1].x, triangleDto.vertices[1].y, triangleDto.vertices[1].z),
                 new Vector3(triangleDto.vertices[2].x, triangleDto.vertices[2].y, triangleDto.vertices[2].z),
-                new Color(255, 0, 0)
+                new Color(material.r, material.g, material.b)
             );
             triangles.push(triangle);
         });

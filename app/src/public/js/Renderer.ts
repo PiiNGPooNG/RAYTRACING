@@ -25,9 +25,9 @@ export default class Renderer {
 
     pixel(x: number, y: number, color: Color): void {
         const redIndex = (x + y * this.#width) * 4;
-        this.#pixels[redIndex] = color.r;
-        this.#pixels[redIndex + 1] = color.g;
-        this.#pixels[redIndex + 2] = color.b;
+        this.#pixels[redIndex] = Math.floor(color.r * 255);
+        this.#pixels[redIndex + 1] = Math.floor(color.g * 255);
+        this.#pixels[redIndex + 2] = Math.floor(color.b * 255);
         this.#pixels[redIndex + 3] = 255;
     }
 
@@ -51,7 +51,7 @@ export default class Renderer {
         const meshes = this.#scene.meshes;
         for (let x = startX; x < startX + width; x++) {
             for (let y = startY; y < startY + height; y++) {
-                let ray = new Ray(camera.origin.add(new Vector3(x/150, y/150, 0)), camera.direction);
+                let ray = new Ray(camera.origin.add(new Vector3(x/100, y/100, 0)), camera.direction);
                 meshes.forEach((mesh) => {
                     mesh.triangles.forEach((triangle) => {
                        ray.calcIntersection(triangle);

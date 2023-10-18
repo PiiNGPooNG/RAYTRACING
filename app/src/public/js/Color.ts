@@ -4,9 +4,9 @@ export default class Color {
     #b: number;
 
     constructor(r: number, g: number, b: number) {
-        this.#r = Math.min(255, Math.max(0, r));
-        this.#g = Math.min(255, Math.max(0, g));
-        this.#b = Math.min(255, Math.max(0, b));
+        this.#r = Math.min(1, Math.max(0, r));
+        this.#g = Math.min(1, Math.max(0, g));
+        this.#b = Math.min(1, Math.max(0, b));
     }
 
     get r(): number {
@@ -19,10 +19,6 @@ export default class Color {
 
     get b(): number {
         return this.#b;
-    }
-
-    get rgb(): string {
-        return `rgb(${this.#r}, ${this.#g}, ${this.#b})`;
     }
 
     static interpolate(color1: Color, color2: Color, t: number): Color {

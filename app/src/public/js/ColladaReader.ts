@@ -47,8 +47,8 @@ export default class ColladaReader {
         this.#scene = {
             camera: { // TODO: take from scene
                 origin: {
-                    x: -1.5,
-                    y: -2,
+                    x: -2.5,
+                    y: -2.5,
                     z: -100
                 },
                 direction: {
@@ -102,7 +102,11 @@ export default class ColladaReader {
         const triangles: Array<TriangleDto> = [];
 
         for (const [_, trianglesNode] of trianglesNodes.entries()) {
-            const materialIndex = this.#scene.materials.push({r: 255, g: 0, b: 0, a: 255}) - 1;
+            const material = this.#dae.querySelector("#" + trianglesNode.getAttribute("material"));
+            const effect = this.#dae.querySelector(material.querySelector("instance_effect").getAttribute("url"));
+            const diffuse = effect.querySelector("diffuse color").textContent.split(" ").map(Number)
+
+            const materialIndex = this.#scene.materials.push({r: diffuse[0], g: diffuse[1], b: diffuse[2], a: diffuse[3]}) - 1;
             const p = trianglesNode.querySelector("p").textContent.split(" ").map(Number);
             const inputs = trianglesNode.querySelectorAll("input");
             const vertexInput = trianglesNode.querySelector("input[semantic='VERTEX']");
