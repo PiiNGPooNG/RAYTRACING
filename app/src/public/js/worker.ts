@@ -7,7 +7,6 @@ import Job from "./Job";
 import {SceneDto} from "./SceneDto";
 import Triangle from "./Triangle.js";
 import Color from "./Color.js";
-import * as wasi from "wasi";
 
 let renderer: Renderer;
 let scene: Scene;

@@ -2,13 +2,17 @@ import Job from './Job';
 import ColladaReader from "./ColladaReader.js";
 
 let reader = new ColladaReader();
-await reader.open("/3d/cube-scene.dae");
+await reader.open("/3d/donut.dae");
+
+console.log(reader.scene);
 
 const width = 500;
 const height = 500;
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
+
+const checkbox: HTMLInputElement = document.querySelector("#render-boxes");
 
 const scaleX = canvas.width / width;
 const scaleY = canvas.height / height;
@@ -96,7 +100,9 @@ function draw() {
     offscreenCtx.putImageData(imageData, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(offscreenCanvas, 0, 0, canvas.width, canvas.height);
-    ctx.drawImage(jobCanvas, 0, 0, canvas.width, canvas.height);
+    if (checkbox.checked) {
+        ctx.drawImage(jobCanvas, 0, 0, canvas.width, canvas.height);
+    }
     requestAnimationFrame(draw);
 }
 

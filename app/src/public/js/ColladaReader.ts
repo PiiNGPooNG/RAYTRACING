@@ -69,7 +69,7 @@ export default class ColladaReader {
         }
     }
 
-    #parseGeometryNode(node: Element): void {
+    #parseGeometryNode(node: Element): void { // TODO: split up function
         const transform = node.querySelector("matrix").textContent.split(" ").map(Number);
         const tMatrix = new TransformationMatrix(transform);
         const instanceGeometry = node.querySelector("instance_geometry");
@@ -102,7 +102,7 @@ export default class ColladaReader {
         const triangles: Array<TriangleDto> = [];
 
         for (const [_, trianglesNode] of trianglesNodes.entries()) {
-            const material = this.#dae.querySelector("#" + trianglesNode.getAttribute("material"));
+            const material = this.#dae.querySelector("#" + trianglesNode.getAttribute("material")); // TODO: this isn't accessing the material properly
             const effect = this.#dae.querySelector(material.querySelector("instance_effect").getAttribute("url"));
             const diffuse = effect.querySelector("diffuse color").textContent.split(" ").map(Number)
 

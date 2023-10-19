@@ -1,7 +1,7 @@
 export interface SceneDto {
     camera: CameraDto | null,
-    materials: Array<MaterialDto>,
-    meshes: Array<Array<TriangleDto>>
+    materials: MaterialDto[]
+    meshes: TriangleDto[][]
 }
 
 export interface CameraDto {
