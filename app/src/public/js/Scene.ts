@@ -1,9 +1,11 @@
 import Mesh from "./Mesh.js";
-import Camera from "./Camera";
+import Camera from "./Camera.js";
+import Light from "./Light.js";
 
 export default class Scene {
     #camera: Camera;
-    #meshes: Array<Mesh> = [];
+    #meshes: Mesh[] = [];
+    #lights: Light[] = [];
 
     constructor(camera: Camera) {
         this.#camera = camera;
@@ -13,8 +15,16 @@ export default class Scene {
         this.#meshes.push(mesh);
     }
 
-    get meshes(): Array<Mesh> {
+    addLight(light: Light): void {
+        this.#lights.push(light);
+    }
+
+    get meshes(): Mesh[] {
         return this.#meshes;
+    }
+
+    get lights(): Light[] {
+        return this.#lights;
     }
 
     get camera(): Camera {

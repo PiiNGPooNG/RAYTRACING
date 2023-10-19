@@ -2,7 +2,7 @@ import Job from './Job';
 import ColladaReader from "./ColladaReader.js";
 
 let reader = new ColladaReader();
-await reader.open("/3d/donut.dae");
+await reader.open("/3d/simple-scene.dae");
 
 console.log(reader.scene);
 

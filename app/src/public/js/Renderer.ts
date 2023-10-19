@@ -49,6 +49,7 @@ export default class Renderer {
     render(startX: number, startY: number, width: number, height: number) {
         const camera = this.#scene.camera;
         const meshes = this.#scene.meshes;
+        const lights = this.#scene.lights;
         for (let x = startX; x < startX + width; x++) {
             for (let y = startY; y < startY + height; y++) {
                 let ray = new Ray(camera.origin.add(new Vector3(x/100, y/100, 0)), camera.direction);
@@ -59,8 +60,18 @@ export default class Renderer {
                 });
                 let intersection = ray.intersection;
                 if (intersection) {
-                    let color = ray.intersectedTriangle.color;
-                    this.depthPixel(x, y, ray.intersection.z, color);
+                    let lightRay = Ray.between(intersection, lights[0].position);
+                    meshes.forEach((mesh) => {
+                        mesh.triangles.forEach((triangle) => {
+                           lightRay.calcIntersection(triangle);
+                        });
+                    })
+                    if (lightRay.intersection == undefined) {
+                        let color = ray.intersectedTriangle.color;
+                        this.pixel(x, y, color);
+                    } else {
+                        this.pixel(x, y, new Color(0, 0, 0));
+                    }
                 }
             }
         }

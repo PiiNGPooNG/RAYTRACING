@@ -7,6 +7,7 @@ import Job from "./Job";
 import {SceneDto} from "./SceneDto";
 import Triangle from "./Triangle.js";
 import Color from "./Color.js";
+import Light from "./Light.js";
 
 let renderer: Renderer;
 let scene: Scene;
@@ -35,6 +36,10 @@ async function setup(sceneDto: SceneDto, buffer: SharedArrayBuffer) {
         const mesh = new Mesh(triangles);
         mesh.translate(new Vector3(0, 0, 2));
         scene.addMesh(new Mesh(triangles));
+    });
+
+    sceneDto.lights.forEach((lightDto) => {
+        scene.addLight(new Light(new Vector3(lightDto.position.x, lightDto.position.y, lightDto.position.z)))
     });
 
     renderer = new Renderer(500, 500, 5, buffer); // TODO: probably should get params from main

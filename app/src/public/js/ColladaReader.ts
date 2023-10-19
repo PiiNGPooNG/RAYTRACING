@@ -49,22 +49,29 @@ export default class ColladaReader {
                 origin: {
                     x: -2.5,
                     y: -2.5,
-                    z: -100
+                    z: 100
                 },
                 direction: {
                     x: 0,
                     y: 0,
-                    z: 1
+                    z: -1
                 }
             },
             materials: [],
-            meshes: []
+            meshes: [],
+            lights: []
         };
 
         for (const [number, node] of nodes.entries()) {
             let geometry = node.querySelector("instance_geometry");
             if (geometry) {
                 this.#parseGeometryNode(node);
+                continue;
+            }
+            let light = node.querySelector("instance_light");
+            if (light) {
+                this.#parseLightNode(node);
+                continue;
             }
         }
     }
@@ -103,9 +110,13 @@ export default class ColladaReader {
 
         for (const [_, trianglesNode] of trianglesNodes.entries()) {
             const material = this.#dae.querySelector("#" + trianglesNode.getAttribute("material")); // TODO: this isn't accessing the material properly
-            const effect = this.#dae.querySelector(material.querySelector("instance_effect").getAttribute("url"));
-            const diffuse = effect.querySelector("diffuse color").textContent.split(" ").map(Number)
-
+            let diffuse;
+            if (material) {
+                const effect = this.#dae.querySelector(material.querySelector("instance_effect").getAttribute("url"));
+                diffuse = effect.querySelector("diffuse color").textContent.split(" ").map(Number)
+            } else {
+                diffuse = [0.5, 0.5, 0.5, 1];
+            }
             const materialIndex = this.#scene.materials.push({r: diffuse[0], g: diffuse[1], b: diffuse[2], a: diffuse[3]}) - 1;
             const p = trianglesNode.querySelector("p").textContent.split(" ").map(Number);
             const inputs = trianglesNode.querySelectorAll("input");
@@ -125,6 +136,20 @@ export default class ColladaReader {
         }
 
         this.#scene.meshes.push(triangles);
+    }
+
+    #parseLightNode(node: Element) {
+        const transform = node.querySelector("matrix").textContent.split(" ").map(Number);
+        const tMatrix = new TransformationMatrix(transform);
+        let lightPosition = new Vector3(0, 0, 0);
+        lightPosition = tMatrix.getTransformed(lightPosition);
+        this.#scene.lights.push({
+            position: {
+                x: lightPosition.x,
+                y: lightPosition.y,
+                z: lightPosition.z
+            }
+        });
     }
 
     get scene(): SceneDto {

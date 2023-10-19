@@ -1,12 +1,13 @@
 export interface SceneDto {
-    camera: CameraDto | null,
-    materials: MaterialDto[]
-    meshes: TriangleDto[][]
+    camera: CameraDto | null;
+    materials: MaterialDto[];
+    meshes: TriangleDto[][];
+    lights: LightDto[];
 }
 
 export interface CameraDto {
-    origin: Vector3Dto,
-    direction: Vector3Dto
+    origin: Vector3Dto;
+    direction: Vector3Dto;
 }
 
 export interface MaterialDto {
@@ -16,13 +17,17 @@ export interface MaterialDto {
     a: number;
 }
 
+export interface LightDto {
+    position: Vector3Dto
+}
+
 export interface TriangleDto {
-    vertices: [Vector3Dto, Vector3Dto, Vector3Dto],
+    vertices: [Vector3Dto, Vector3Dto, Vector3Dto];
     material: number;
 }
 
 export interface Vector3Dto {
-    x: number,
+    x: number;
     y: number;
     z: number;
 }

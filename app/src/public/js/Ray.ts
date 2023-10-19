@@ -13,6 +13,11 @@ export default class Ray {
         this.#direction = direction;
     }
 
+    static between(from: Vector3, to: Vector3): Ray {
+        const direction = to.subtract(from);
+        return new Ray(from, direction);
+    }
+
     calcIntersection(triangle: Triangle): void {
         let q = triangle.A.copy();
         let v = triangle.B.subtract(triangle.A);
@@ -28,7 +33,7 @@ export default class Ray {
 
         let d = q.subtract(p);
         let lambda = Vector3.determinant(d, v.negate(), w.negate()) / determinant;
-        if (lambda <= 0) {
+        if (lambda <= 1e-10) {
             return;
         }
         if (this.#intersectionLambda && this.#intersectionLambda < lambda) {
