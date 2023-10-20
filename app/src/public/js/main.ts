@@ -1,15 +1,17 @@
 import Job from './Job';
 import ColladaReader from "./ColladaReader.js";
+import Matrix from "./Matrix.js";
 
 let reader = new ColladaReader();
 await reader.open("/3d/simple-scene.dae");
 
-console.log(reader.scene);
-
-const width = 500;
-const height = 500;
+const width = 640;
+const height = 360;
+const displayFactor = 1;
 
 const canvas = document.querySelector("canvas");
+canvas.width = width * displayFactor;
+canvas.height = height * displayFactor;
 const ctx = canvas.getContext("2d");
 
 const checkbox: HTMLInputElement = document.querySelector("#render-boxes");
@@ -50,6 +52,8 @@ for (let i = 0; i < workerAmount; i++) {
     worker.postMessage({
         type: "setup",
         scene: reader.scene,
+        width: width,
+        height: height,
         buffer: sharedBuffer
     });
     workers.push(worker);

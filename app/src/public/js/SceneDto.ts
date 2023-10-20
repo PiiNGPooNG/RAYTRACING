@@ -6,8 +6,13 @@ export interface SceneDto {
 }
 
 export interface CameraDto {
-    origin: Vector3Dto;
-    direction: Vector3Dto;
+    transform: number[][];
+    perspective: {
+        xfov: number;
+        aspectRatio: number;
+        znear: number;
+        zfar: number;
+    };
 }
 
 export interface MaterialDto {

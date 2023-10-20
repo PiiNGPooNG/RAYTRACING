@@ -34,7 +34,7 @@ export default class Renderer {
     depthPixel(x: number, y: number, z: number, color: Color): void {
         let t = z / this.#depth;
         t = Math.min(1, Math.max(0, t));
-        let depthColor = Color.interpolate(color, new Color(255, 255, 255), t);
+        let depthColor = Color.interpolate(color, new Color(1, 1, 1), t);
         this.pixel(x, y, depthColor);
     }
 
@@ -52,7 +52,11 @@ export default class Renderer {
         const lights = this.#scene.lights;
         for (let x = startX; x < startX + width; x++) {
             for (let y = startY; y < startY + height; y++) {
-                let ray = new Ray(camera.origin.add(new Vector3(x/100, y/100, 0)), camera.direction);
+                let ray = new Ray(
+                    new Vector3(2 / this.#width * x - 1, 1 - 2 / this.#height * y, 0),
+                    new Vector3(0, 0, 1)
+                );
+
                 meshes.forEach((mesh) => {
                     mesh.triangles.forEach((triangle) => {
                        ray.calcIntersection(triangle);

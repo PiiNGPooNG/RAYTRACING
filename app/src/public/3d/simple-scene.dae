@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 3.6.4 commit date:2023-09-25, commit time:13:24, hash:21bfc5e7fe3f</authoring_tool>
     </contributor>
-    <created>2023-10-19T15:54:35</created>
-    <modified>2023-10-19T15:54:35</modified>
+    <created>2023-10-20T18:28:04</created>
+    <modified>2023-10-20T18:28:04</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -66,7 +66,7 @@
           <bufsize sid="bufsize" type="int">2880</bufsize>
           <samp sid="samp" type="int">3</samp>
           <buffers sid="buffers" type="int">1</buffers>
-          <radius sid="radius" type="float">2.898475</radius>
+          <radius sid="radius" type="float">0.1</radius>
           <area_shape sid="area_shape" type="int">1</area_shape>
           <area_size sid="area_size" type="float">0.1</area_size>
           <area_sizey sid="area_sizey" type="float">0.1</area_sizey>
@@ -189,19 +189,19 @@
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
       <node id="Plane" name="Plane" type="NODE">
-        <matrix sid="transform">-1.040261 -5.076199 -1.00255 0.09497809 4.306789 -0.2826702 -3.037549 0.2877673 2.867833 -1.416809 4.198003 0.1022952 0 0 0 1</matrix>
+        <matrix sid="transform">5 0 0 0 0 5 0 0 0 0 5 0 0 0 0 1</matrix>
         <instance_geometry url="#Plane-mesh" name="Plane"/>
       </node>
       <node id="Camera" name="Camera" type="NODE">
-        <matrix sid="transform">0.6859207 -0.3240135 0.6515582 7.358891 0.7276763 0.3054208 -0.6141704 -6.925791 0 0.8953956 0.4452714 4.958309 0 0 0 1</matrix>
+        <matrix sid="transform">0.8453363 -0.2378789 0.4783514 5.040022 0.5342345 0.3764023 -0.7569113 -8.426725 6.91271e-7 0.8953965 0.4452697 5.644511 0 0 0 1</matrix>
         <instance_camera url="#Camera-camera"/>
       </node>
       <node id="Light" name="Light" type="NODE">
-        <matrix sid="transform">0.3377081 0.5023722 -0.7959745 2.147264 0.9252748 -0.02203927 0.3786565 1.449832 0.1726838 -0.8643705 -0.4722752 5.969894 0 0 0 1</matrix>
+        <matrix sid="transform">-0.2908646 -0.7711008 0.5663932 4.076245 0.9551712 -0.1998834 0.2183912 1.005454 -0.05518906 0.6045247 0.7946723 5.903862 0 0 0 1</matrix>
         <instance_light url="#Light-light"/>
       </node>
       <node id="Cube" name="Cube" type="NODE">
-        <matrix sid="transform">-0.1971018 -0.9618043 -0.1899565 -0.09497815 0.8160217 -0.05355847 -0.5755346 -0.2877673 0.5433778 -0.2684475 0.7954096 0.8977048 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 1</matrix>
         <instance_geometry url="#Cube-mesh" name="Cube">
           <bind_material>
             <technique_common>

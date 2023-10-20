@@ -1,6 +1,6 @@
 import {SceneDto, TriangleDto, Vector3Dto} from "./SceneDto";
-import TransformationMatrix from "./TransformationMatrix.js";
 import Vector3 from "./Vector3.js";
+import Matrix from "./Matrix.js";
 
 export default class ColladaReader {
     #dae: Document;
@@ -45,18 +45,7 @@ export default class ColladaReader {
         const nodes = visualScene.querySelectorAll("node");
 
         this.#scene = {
-            camera: { // TODO: take from scene
-                origin: {
-                    x: -2.5,
-                    y: -2.5,
-                    z: 100
-                },
-                direction: {
-                    x: 0,
-                    y: 0,
-                    z: -1
-                }
-            },
+            camera: null,
             materials: [],
             meshes: [],
             lights: []
@@ -73,12 +62,16 @@ export default class ColladaReader {
                 this.#parseLightNode(node);
                 continue;
             }
+            let camera = node.querySelector("instance_camera");
+            if (camera) {
+                this.#parseCameraNode(node);
+            }
         }
     }
 
     #parseGeometryNode(node: Element): void { // TODO: split up function
         const transform = node.querySelector("matrix").textContent.split(" ").map(Number);
-        const tMatrix = new TransformationMatrix(transform);
+        const tMatrix = Matrix.from1D(transform, 4, 4);
         const instanceGeometry = node.querySelector("instance_geometry");
         const geometry = this.#dae.querySelector(instanceGeometry.getAttribute("url"));
 
@@ -96,7 +89,7 @@ export default class ColladaReader {
         const vertices: Array<Vector3Dto> = [];
         for (let i = 0; i < array.length; i += stride) {
             let vertex = Vector3.fromArray(array.slice(i, i+3));
-            vertex = tMatrix.getTransformed(vertex);
+            vertex = tMatrix.transform(vertex);
             vertices.push({
                 x: vertex.x,
                 y: vertex.y,
@@ -140,9 +133,9 @@ export default class ColladaReader {
 
     #parseLightNode(node: Element) {
         const transform = node.querySelector("matrix").textContent.split(" ").map(Number);
-        const tMatrix = new TransformationMatrix(transform);
+        const tMatrix = Matrix.from1D(transform, 4, 4);
         let lightPosition = new Vector3(0, 0, 0);
-        lightPosition = tMatrix.getTransformed(lightPosition);
+        lightPosition = tMatrix.transform(lightPosition);
         this.#scene.lights.push({
             position: {
                 x: lightPosition.x,
@@ -150,6 +143,26 @@ export default class ColladaReader {
                 z: lightPosition.z
             }
         });
+    }
+
+    #parseCameraNode(node: Element) {
+        const transform = node.querySelector("matrix").textContent.split(" ").map(Number);
+        let tMatrix = Matrix.from1D(transform, 4, 4);
+
+        const instance_camera = node.querySelector("instance_camera");
+        const camera = this.#dae.querySelector(instance_camera.getAttribute("url"));
+
+        let perspective = {
+            xfov: parseFloat(camera.querySelector("xfov").textContent),
+            aspectRatio: parseFloat(camera.querySelector("aspect_ratio").textContent),
+            znear: parseFloat(camera.querySelector("znear").textContent),
+            zfar: parseFloat(camera.querySelector("zfar").textContent),
+        };
+
+        this.#scene.camera = {
+            transform: tMatrix.asArray,
+            perspective: perspective
+        };
     }
 
     get scene(): SceneDto {

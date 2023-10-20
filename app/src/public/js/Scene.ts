@@ -1,21 +1,26 @@
 import Mesh from "./Mesh.js";
 import Camera from "./Camera.js";
 import Light from "./Light.js";
+import PerspectiveCamera from "./PerspectiveCamera.js";
 
 export default class Scene {
-    #camera: Camera;
+    #camera: PerspectiveCamera;
     #meshes: Mesh[] = [];
     #lights: Light[] = [];
 
-    constructor(camera: Camera) {
+    constructor(camera: PerspectiveCamera) {
         this.#camera = camera;
     }
 
     addMesh(mesh: Mesh): void {
+        mesh.triangles.forEach((triangle) => {
+            triangle.transform(this.#camera.view);
+        });
         this.#meshes.push(mesh);
     }
 
     addLight(light: Light): void {
+        light.transform(this.#camera.view);
         this.#lights.push(light);
     }
 
@@ -27,7 +32,7 @@ export default class Scene {
         return this.#lights;
     }
 
-    get camera(): Camera {
+    get camera(): PerspectiveCamera {
         return this.#camera;
     }
 }

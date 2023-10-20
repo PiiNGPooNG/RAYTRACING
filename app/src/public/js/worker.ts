@@ -8,18 +8,22 @@ import {SceneDto} from "./SceneDto";
 import Triangle from "./Triangle.js";
 import Color from "./Color.js";
 import Light from "./Light.js";
+import PerspectiveCamera from "./PerspectiveCamera.js";
+import Matrix from "./Matrix.js";
 
 let renderer: Renderer;
 let scene: Scene;
 
-async function setup(sceneDto: SceneDto, buffer: SharedArrayBuffer) {
+async function setup(sceneDto: SceneDto, width: number, height: number, buffer: SharedArrayBuffer) {
     const cameraDto = sceneDto.camera;
-    scene = new Scene(
-        new Camera(
-            new Vector3(cameraDto.origin.x, cameraDto.origin.y, cameraDto.origin.z),
-            new Vector3(cameraDto.direction.x, cameraDto.direction.y, cameraDto.direction.z),
-        )
+    const camera = new PerspectiveCamera(
+        cameraDto.perspective.xfov,
+        cameraDto.perspective.aspectRatio,
+        cameraDto.perspective.znear,
+        cameraDto.perspective.zfar
     );
+    camera.transform = new Matrix(cameraDto.transform);
+    scene = new Scene(camera);
 
     sceneDto.meshes.forEach((meshDto) => {
         let triangles: Array<Triangle> = [];
@@ -34,7 +38,6 @@ async function setup(sceneDto: SceneDto, buffer: SharedArrayBuffer) {
             triangles.push(triangle);
         });
         const mesh = new Mesh(triangles);
-        mesh.translate(new Vector3(0, 0, 2));
         scene.addMesh(new Mesh(triangles));
     });
 
@@ -42,7 +45,7 @@ async function setup(sceneDto: SceneDto, buffer: SharedArrayBuffer) {
         scene.addLight(new Light(new Vector3(lightDto.position.x, lightDto.position.y, lightDto.position.z)))
     });
 
-    renderer = new Renderer(500, 500, 5, buffer); // TODO: probably should get params from main
+    renderer = new Renderer(width, height, 5, buffer);
     renderer.setScene(scene);
 }
 
@@ -53,7 +56,7 @@ function render(startX: number, startY: number, width: number, height: number) {
 self.onmessage = async (message) => {
     const data = message.data;
     if (data.type == "setup") {
-        await setup(data.scene, data.buffer);
+        await setup(data.scene, data.width, data.height, data.buffer);
         self.postMessage({type: "ready"});
     } else if (data.type == "render") {
         const job = data.job;
