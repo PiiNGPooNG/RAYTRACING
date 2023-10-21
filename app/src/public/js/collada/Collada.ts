@@ -3,7 +3,7 @@ import ColladaGeometryLibrary from "./ColladaGeometryLibrary.js";
 import ColladaLightLibrary from "./ColladaLightLibrary.js";
 import ColladaCameraLibrary from "./ColladaCameraLibrary.js";
 import ColladaMaterialLibrary from "./ColladaMaterialLibrary.js";
-import ColladaEffectLibrary from "./ColladaEffectLibrary";
+import ColladaEffectLibrary from "./ColladaEffectLibrary.js";
 import ColladaVisualSceneLibrary from "./ColladaVisualSceneLibrary.js";
 
 export default class Collada {
