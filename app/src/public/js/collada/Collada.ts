@@ -1,4 +1,4 @@
-import {DaeScene} from "./ColladaTypes";
+import {DaeCamera, DaeEffect, DaeGeometry, DaeLight, DaeMaterial, DaeScene, DaeVisualScene} from "./ColladaTypes";
 import ColladaGeometryLibrary from "./ColladaGeometryLibrary.js";
 import ColladaLightLibrary from "./ColladaLightLibrary.js";
 import ColladaCameraLibrary from "./ColladaCameraLibrary.js";
@@ -47,7 +47,7 @@ export default class Collada {
             switch (child.tagName) {
                 case "scene":
                     const instanceVisualSceneEl = child.querySelector("instance_visual_scene")
-                    this.scene.visual = instanceVisualSceneEl.getAttribute("url");
+                    this.scene.visual = instanceVisualSceneEl.getAttribute("url").substring(1);
                     break;
 
                 case "library_visual_scenes":
@@ -81,5 +81,36 @@ export default class Collada {
                     break;
             }
         }
+    }
+
+    getScene(): DaeScene {
+        return this.scene;
+    }
+
+    getVisualScene(id: string): DaeVisualScene {
+        return this.visualScenes.getById(id);
+    }
+
+    getCamera(id: string): DaeCamera {
+        return this.cameras.getById(id);
+    }
+
+    getLight(id: string): DaeLight {
+        return this.lights.getById(id);
+    }
+
+    getEffect(id: string): DaeEffect {
+        return this.effects.getById(id);
+    }
+
+    getEffectByMaterial(materialId: string): DaeEffect {
+        return this.effects.getById(this.materials.getById(materialId).effect);
+    }
+
+    getMaterial(id: string): DaeMaterial {
+        return this.materials.getById(id);
+    }
+    getGeometry(id: string): DaeGeometry {
+        return this.geometries.getById(id);
     }
 }

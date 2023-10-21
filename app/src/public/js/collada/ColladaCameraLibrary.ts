@@ -29,4 +29,10 @@ export default class ColladaCameraLibrary {
                 break;
         }
     }
+
+    getById(id: string) {
+        return this.cameras.find(camera => {
+            return camera.id === id;
+        });
+    }
 }

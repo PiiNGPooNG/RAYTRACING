@@ -45,7 +45,7 @@ export default class ColladaVisualSceneLibrary {
     }
 
     private getParsedNodeInstances(instanceEl: Element): DaeVisualScene["nodes"][number]["instances"][number] {
-        const url = instanceEl.getAttribute("url");
+        const url = instanceEl.getAttribute("url").substring(1);
         switch (instanceEl.tagName) {
             case "instance_camera":
                 return {
@@ -72,11 +72,17 @@ export default class ColladaVisualSceneLibrary {
                     for (const [_, instanceMaterialEl] of instanceMaterialEls.entries()) {
                         instance.materials.push({
                             symbol: instanceMaterialEl.getAttribute("symbol"),
-                            target: instanceMaterialEl.getAttribute("target")
+                            target: instanceMaterialEl.getAttribute("target").substring(1)
                         })
                     }
                 }
                 return instance;
         }
+    }
+
+    getById(id: string) {
+        return this.visualScenes.find(visualScene => {
+           return visualScene.id === id;
+        });
     }
 }

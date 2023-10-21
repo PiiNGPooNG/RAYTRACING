@@ -12,10 +12,16 @@ export default class ColladaMaterialLibrary {
     private parseMaterial(materialEl: Element) {
         const id = materialEl.getAttribute("id");
         const instanceEffectEl = materialEl.querySelector("instance_effect");
-        const effect = instanceEffectEl.getAttribute("url");
+        const effect = instanceEffectEl.getAttribute("url").substring(1);
         this.materials.push({
            id: id,
            effect: effect
+        });
+    }
+
+    getById(id: string) {
+        return this.materials.find(material => {
+            return material.id === id;
         });
     }
 }

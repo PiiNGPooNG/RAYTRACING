@@ -18,7 +18,7 @@ export default class ColladaGeometryLibrary {
             sources: []
         };
         const verticesEl = meshEl.querySelector("vertices");
-        const verticesSource = verticesEl.querySelector("input[semantic='POSITION']").getAttribute("source");
+        const verticesSource = verticesEl.querySelector("input[semantic='POSITION']").getAttribute("source").substring(1);
         for (const child of meshEl.children) {
             switch (child.tagName) {
                 case "source":
@@ -58,7 +58,7 @@ export default class ColladaGeometryLibrary {
         const inputEls = trianglesEl.querySelectorAll("input");
         for (const [_, inputEl] of inputEls.entries()) {
             const semantic = inputEl.getAttribute("semantic");
-            const source = inputEl.getAttribute("source");
+            const source = inputEl.getAttribute("source").substring(1);
             const offset = parseInt(inputEl.getAttribute("offset"));
             inputs.push({
                 semantic: semantic,
@@ -75,5 +75,11 @@ export default class ColladaGeometryLibrary {
             triangles.material = material
         }
         return triangles;
+    }
+
+    getById(id: string) {
+        return this.geometries.find(geometry => {
+            return geometry.id === id;
+        });
     }
 }

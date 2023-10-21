@@ -1,5 +1,4 @@
 import {DaeEffect} from "./ColladaTypes";
-import e from "express";
 
 export default class ColladaEffectsLibrary {
     effects: DaeEffect[] = [];
@@ -33,5 +32,11 @@ export default class ColladaEffectsLibrary {
                 this.effects.push(effect);
                 break;
         }
+    }
+
+    getById(id: string) {
+        return this.effects.find(effect => {
+            return effect.id === id;
+        });
     }
 }

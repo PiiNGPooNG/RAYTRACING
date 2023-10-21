@@ -32,4 +32,10 @@ export default class ColladaLightLibrary {
                 break;
         }
     }
+
+    getById(id: string) {
+        return this.lights.find(light => {
+            return light.id === id;
+        });
+    }
 }
