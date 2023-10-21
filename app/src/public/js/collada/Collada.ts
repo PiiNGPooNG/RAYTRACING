@@ -3,7 +3,7 @@ import ColladaGeometryLibrary from "./ColladaGeometryLibrary.js";
 import ColladaLightLibrary from "./ColladaLightLibrary.js";
 import ColladaCameraLibrary from "./ColladaCameraLibrary.js";
 import ColladaMaterialLibrary from "./ColladaMaterialLibrary.js";
-import ColladaEffectsLibrary from "./ColladaEffectsLibrary.js";
+import ColladaEffectLibrary from "./ColladaEffectLibrary";
 import ColladaVisualSceneLibrary from "./ColladaVisualSceneLibrary.js";
 
 export default class Collada {
@@ -11,7 +11,7 @@ export default class Collada {
     visualScenes: ColladaVisualSceneLibrary;
     cameras: ColladaCameraLibrary;
     lights: ColladaLightLibrary;
-    effects: ColladaEffectsLibrary;
+    effects: ColladaEffectLibrary;
     materials: ColladaMaterialLibrary;
     geometries: ColladaGeometryLibrary;
 
@@ -66,7 +66,7 @@ export default class Collada {
                     break;
 
                 case "library_effects":
-                    this.effects = new ColladaEffectsLibrary();
+                    this.effects = new ColladaEffectLibrary();
                     this.effects.parse(child);
                     break;
 

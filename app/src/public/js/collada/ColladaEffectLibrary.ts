@@ -1,6 +1,6 @@
 import {DaeEffect} from "./ColladaTypes";
 
-export default class ColladaEffectsLibrary {
+export default class ColladaEffectLibrary {
     effects: DaeEffect[] = [];
 
     parse(libraryEffectEl: Element) {
