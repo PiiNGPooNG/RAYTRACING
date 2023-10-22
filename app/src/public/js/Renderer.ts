@@ -70,7 +70,8 @@ export default class Renderer {
                         });
                     })
                     if (lightRay.intersection == undefined) {
-                        let color = ray.intersection.triangle.color;
+                        const angle = lightRay.direction.angleTo(intersection.triangle.normal);
+                        let color = ray.intersection.triangle.color.lightAtAngle(new Color(1, 1, 1), angle);
                         this.pixel(x, y, color);
                     } else {
                         this.pixel(x, y, new Color(0, 0, 0));

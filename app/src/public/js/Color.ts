@@ -16,4 +16,12 @@ export default class Color {
             (1 - t) * color1.b + t * color2.b
         )
     }
+
+    lightAtAngle(lightColor: Color, angle: number) {
+        return new Color(
+            this.r * lightColor.r * Math.cos(angle),
+            this.g * lightColor.g * Math.cos(angle),
+            this.b * lightColor.b * Math.cos(angle)
+        );
+    }
 }

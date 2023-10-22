@@ -31,4 +31,16 @@ export default class Vector3 {
     copy(): Vector3 {
         return new Vector3(this.x, this.y, this.z);
     }
+
+    angleTo(other: Vector3) {
+        return Math.acos(this.scalarProduct(other) / (this.norm() * other.norm()));
+    }
+
+    norm() {
+        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    }
+
+    scalarProduct(other: Vector3) {
+        return this.x * other.x + this.y * other.y + this.z * other.z;
+    }
 }
