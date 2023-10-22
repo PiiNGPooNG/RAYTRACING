@@ -52,7 +52,7 @@ export default class Renderer {
         for (let x = startX; x < startX + width; x++) {
             for (let y = startY; y < startY + height; y++) {
                 let ray = new Ray(
-                    new Vector3(2 / this.#width * x - 1, 1 - 2 / this.#height * y, 0),
+                    new Vector3(2 / this.#width * x - 1, 1 - 2 / this.#height * y, -1),
                     new Vector3(0, 0, 1)
                 );
 
