@@ -16,9 +16,9 @@ export default class Ray {
     }
 
     calcIntersection(triangle: Triangle): void {
-        let q = triangle.A.copy();
-        let v = triangle.B.subtract(triangle.A);
-        let w = triangle.C.subtract(triangle.A);
+        let q = triangle.A.position.copy();
+        let v = triangle.B.position.subtract(triangle.A.position);
+        let w = triangle.C.position.subtract(triangle.A.position);
 
         let p = this.origin;
         let u = this.direction;

@@ -7,6 +7,7 @@ import Light from "./Light.js";
 import Mesh from "./Mesh.js";
 import Color from "./Color.js";
 import Triangle from "./Triangle.js";
+import Vertex from "./Vertex.js";
 import {DaeFull, DaeVisualScene} from "./collada/ColladaTypes";
 
 
@@ -103,12 +104,20 @@ function getMeshes(visualScene: DaeVisualScene) {
 
                 const actualTriangles: Triangle[] = [];
                 for (let i = 0; i < triangles.count; i++) {
-                    const index = i * 3 * triangles.inputs.length;
+                    const index = i * 3 * inputCount;
                     actualTriangles.push(new Triangle(
-                        Vector3.fromArray(vertices[indices[index + vertexInput.offset]]),
-                        Vector3.fromArray(vertices[indices[index + inputCount + vertexInput.offset]]),
-                        Vector3.fromArray(vertices[indices[index + inputCount * 2 + vertexInput.offset]]),
-                        Vector3.fromArray(normals[indices[index + normalInput.offset]]),
+                        new Vertex(
+                            Vector3.fromArray(vertices[indices[index + vertexInput.offset]]),
+                            Vector3.fromArray(normals[indices[index + normalInput.offset]])
+                        ),
+                        new Vertex(
+                            Vector3.fromArray(vertices[indices[index + inputCount + vertexInput.offset]]),
+                            Vector3.fromArray(normals[indices[index + inputCount + normalInput.offset]])
+                        ),
+                        new Vertex(
+                            Vector3.fromArray(vertices[indices[index + inputCount * 2 + vertexInput.offset]]),
+                            Vector3.fromArray(normals[indices[index + inputCount * 2 + normalInput.offset]])
+                        ),
                         color
                     ));
                 }

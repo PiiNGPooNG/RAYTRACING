@@ -1,42 +1,40 @@
 import Color from "./Color.js";
-import Vector3 from "./Vector3.js";
 import Matrix from "./Matrix.js";
+import Vertex from "./Vertex.js";
+import Vector3 from "./Vector3";
 
 export default class Triangle {
-    private _A: Vector3;
-    private _B: Vector3;
-    private _C: Vector3;
-    private _normal: Vector3;
+    private _A: Vertex;
+    private _B: Vertex;
+    private _C: Vertex;
     readonly color: Color;
 
-    constructor(A: Vector3, B: Vector3, C: Vector3, normal: Vector3, color: Color) {
+    constructor(A: Vertex, B: Vertex, C: Vertex, color: Color) {
         this._A = A;
         this._B = B;
         this._C = C;
-        this._normal = normal;
         this.color = color;
     }
 
-    get A(): Vector3 {
+    get A(): Vertex {
         return this._A;
     }
 
-    get B(): Vector3 {
+    get B(): Vertex {
         return this._B;
     }
 
-    get C(): Vector3 {
+    get C(): Vertex {
         return this._C;
     }
 
-    get normal(): Vector3 {
-        return this._normal;
+    get normal() { // TODO: proper implementation for smoothing
+        return this._A.normal;
     }
 
     transform(matrix: Matrix) {
-        this._A = matrix.transform(this._A);
-        this._B = matrix.transform(this._B);
-        this._C = matrix.transform(this._C);
-        this._normal = matrix.transform(this._normal);
+        this._A.transform(matrix);
+        this._B.transform(matrix);
+        this._C.transform(matrix);
     }
 }

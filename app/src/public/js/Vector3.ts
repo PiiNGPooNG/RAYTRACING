@@ -18,6 +18,10 @@ export default class Vector3 {
         return new Vector3(this.x * scalar, this.y * scalar, this.z * scalar);
     }
 
+    divideBy(divisor: number): Vector3 {
+        return new Vector3(this.x / divisor, this.y / divisor, this.z / divisor);
+    }
+
     negate(): Vector3 {
         return new Vector3(-this.x, -this.y, -this.z);
     }
@@ -33,14 +37,14 @@ export default class Vector3 {
     }
 
     angleTo(other: Vector3) {
-        return Math.acos(this.scalarProduct(other) / (this.norm() * other.norm()));
+        return Math.acos(this.dot(other) / (this.norm() * other.norm()));
     }
 
     norm() {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
-    scalarProduct(other: Vector3) {
+    dot(other: Vector3) {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 }
