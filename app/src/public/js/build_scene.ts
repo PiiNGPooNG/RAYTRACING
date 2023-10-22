@@ -99,6 +99,7 @@ function getMeshes(visualScene: DaeVisualScene) {
                         Vector3.fromArray(vertices[indices[index + vertexInput.offset]]),
                         Vector3.fromArray(vertices[indices[index + inputCount + vertexInput.offset]]),
                         Vector3.fromArray(vertices[indices[index + inputCount * 2 + vertexInput.offset]]),
+                        Vector3.fromArray(normals[indices[index + normalInput.offset]]),
                         color
                     ));
                 }
