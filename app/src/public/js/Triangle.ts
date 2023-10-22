@@ -1,7 +1,6 @@
 import Color from "./Color.js";
 import Matrix from "./Matrix.js";
 import Vertex from "./Vertex.js";
-import Vector3 from "./Vector3";
 
 export default class Triangle {
     private _A: Vertex;

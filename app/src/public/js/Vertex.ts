@@ -20,6 +20,6 @@ export default class Vertex {
 
     transform(matrix: Matrix) {
         this._position = matrix.transform(this._position);
-        this._normal = matrix.transform(this._normal);
+        this._normal = matrix.transformNormal(this._normal);
     }
 }

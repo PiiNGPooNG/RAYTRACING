@@ -26,6 +26,11 @@ export default class Vector3 {
         return new Vector3(-this.x, -this.y, -this.z);
     }
 
+    normalized(): Vector3 {
+        const norm = this.norm();
+        return new Vector3(this.x / norm, this.y / norm, this.z / norm);
+    }
+
     static determinant(u: Vector3, v: Vector3, w: Vector3): number {
         return u.x * v.y * w.z - u.z * v.y * w.x
             + v.x * w.y * u.z - v.z * w.y * u.x
@@ -37,7 +42,7 @@ export default class Vector3 {
     }
 
     angleTo(other: Vector3) {
-        return Math.acos(this.dot(other) / (this.norm() * other.norm()));
+        return Math.max(Math.acos(this.dot(other) / (this.norm() * other.norm())), 0);
     }
 
     norm() {
@@ -46,5 +51,13 @@ export default class Vector3 {
 
     dot(other: Vector3) {
         return this.x * other.x + this.y * other.y + this.z * other.z;
+    }
+
+    cross(other: Vector3) {
+        return new Vector3(
+            this.y * other.z - this.z * other.y,
+            this.z * other.x - this.x * other.z,
+            this.x * other.y - this.y * other.x
+        );
     }
 }

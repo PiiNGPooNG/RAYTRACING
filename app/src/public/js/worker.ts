@@ -6,7 +6,7 @@ let renderer: Renderer;
 
 async function setup(dae: DaeFull, width: number, height: number, buffer: SharedArrayBuffer) {
     const scene = getScene(dae);
-    renderer = new Renderer(width, height, 5, buffer);
+    renderer = new Renderer(width, height, buffer);
     renderer.setScene(scene);
 }
 

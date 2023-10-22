@@ -3,7 +3,6 @@ import Light from "./Light.js";
 import Camera from "./Camera.js";
 
 export default class Scene {
-    __class = "Scene";
     private readonly _camera: Camera;
     private _meshes: Mesh[] = [];
     private _lights: Light[] = [];

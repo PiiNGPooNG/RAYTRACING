@@ -7,10 +7,10 @@ export default class Matrix {
     private readonly matrix: number[][];
 
     constructor(raw: number[][]) {
-        this.n = raw.length;
-        this.m = raw[0].length;
+        this.m = raw.length;
+        this.n = raw[0].length;
         for (const row of raw) {
-            if (row.length != this.m) {
+            if (row.length != this.n) {
                 throw new Error("Bad matrix structure");
             }
         }
@@ -109,6 +109,18 @@ export default class Matrix {
             (m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z + m[0][3]) / divisor,
             (m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z + m[1][3]) / divisor,
             (m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3]) / divisor,
+        );
+    }
+
+    transformNormal(v: Vector3) {
+        if (this.m != 4 || this.n != 4) {
+            throw new Error("Can't use this matrix to transform Vector3");
+        }
+        const m = this.matrix;
+        return new Vector3(
+            m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z,
+            m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z,
+            m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z,
         );
     }
 }

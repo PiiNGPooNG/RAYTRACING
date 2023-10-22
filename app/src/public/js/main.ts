@@ -1,7 +1,7 @@
 import Job from './Job';
 import Collada from "./collada/Collada.js";
 
-const collada = await Collada.fromPath("/3d/donut.dae");
+const collada = await Collada.fromPath("/3d/simple-scene.dae");
 
 const width = 640;
 const height = 360;
@@ -41,7 +41,7 @@ for (let x = 0; x < width; x += 50) {
     }
 }
 
-jobs.sort(() => Math.random() - 0.5);
+//jobs.sort(() => Math.random() - 0.5);
 
 const workerAmount = 6;
 const workers: Array<Worker> = [];

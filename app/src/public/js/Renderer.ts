@@ -1,22 +1,19 @@
 import Color from "./Color.js";
 import Ray from "./Ray.js";
 import Vector3 from "./Vector3.js";
-import Triangle from "./Triangle.js";
 import Scene from "./Scene.js";
 
 export default class Renderer {
-    #width: number;
-    #height: number;
-    #depth: number;
-    #pixels: Uint8ClampedArray;
+    readonly width: number;
+    readonly height: number;
+    private readonly pixels: Uint8ClampedArray;
 
     #scene: Scene;
 
-    constructor(width: number, height: number, depth: number, buffer: SharedArrayBuffer) {
-        this.#width = width;
-        this.#height = height;
-        this.#depth = depth;
-        this.#pixels = new Uint8ClampedArray(buffer);
+    constructor(width: number, height: number, buffer: SharedArrayBuffer) {
+        this.width = width;
+        this.height = height;
+        this.pixels = new Uint8ClampedArray(buffer);
     }
 
     setScene(scene: Scene) {
@@ -24,26 +21,11 @@ export default class Renderer {
     }
 
     pixel(x: number, y: number, color: Color): void {
-        const redIndex = (x + y * this.#width) * 4;
-        this.#pixels[redIndex] = Math.floor(color.r * 255);
-        this.#pixels[redIndex + 1] = Math.floor(color.g * 255);
-        this.#pixels[redIndex + 2] = Math.floor(color.b * 255);
-        this.#pixels[redIndex + 3] = 255;
-    }
-
-    depthPixel(x: number, y: number, z: number, color: Color): void {
-        let t = z / this.#depth;
-        t = Math.min(1, Math.max(0, t));
-        let depthColor = Color.interpolate(color, new Color(1, 1, 1), t);
-        this.pixel(x, y, depthColor);
-    }
-
-    get width(): number {
-        return this.#width;
-    }
-
-    get height(): number {
-        return this.#height;
+        const redIndex = (x + y * this.width) * 4;
+        this.pixels[redIndex] = Math.floor(color.r * 255);
+        this.pixels[redIndex + 1] = Math.floor(color.g * 255);
+        this.pixels[redIndex + 2] = Math.floor(color.b * 255);
+        this.pixels[redIndex + 3] = 255;
     }
 
     render(startX: number, startY: number, width: number, height: number) {
@@ -52,7 +34,7 @@ export default class Renderer {
         for (let x = startX; x < startX + width; x++) {
             for (let y = startY; y < startY + height; y++) {
                 let ray = new Ray(
-                    new Vector3(2 / this.#width * x - 1, 1 - 2 / this.#height * y, -1),
+                    new Vector3(2 / this.width * x - 1, 1 - 2 / this.height * y, -1),
                     new Vector3(0, 0, 1)
                 );
 
@@ -70,8 +52,8 @@ export default class Renderer {
                            lightRay.calcIntersection(triangle);
                         });
                     })
-                    if (lightRay.intersection == undefined) {
-                        const angle = lightRay.direction.angleTo(intersection.triangle.normal);
+                    if (lightRay.intersection === undefined) {
+                        let angle = lightRay.direction.angleTo(intersection.triangle.normal);
                         let color = ray.intersection.triangle.color.lightAtAngle(light.color, angle);
                         this.pixel(x, y, color);
                     } else {
