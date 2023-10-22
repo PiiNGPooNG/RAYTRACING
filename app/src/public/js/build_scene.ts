@@ -61,7 +61,9 @@ function getLights(visualScene: DaeVisualScene) {
             return instance.type === "light";
         });
         for (const instance of instances) {
-            const light = new Light(new Vector3(0, 0, 0));
+            const lightObj = collada.getLight(instance.url);
+            const color = new Color(lightObj.color.r, lightObj.color.g, lightObj.color.b);
+            const light = new Light(new Vector3(0, 0, 0), color);
             light.transform(transform);
             lights.push(light);
         }

@@ -63,7 +63,8 @@ export default class Renderer {
                 });
                 let intersection = ray.intersection;
                 if (intersection) {
-                    let lightRay = Ray.between(intersection.position, lights[0].position);
+                    let light = lights[0];
+                    let lightRay = Ray.between(intersection.position, light.position);
                     meshes.forEach((mesh) => {
                         mesh.triangles.forEach((triangle) => {
                            lightRay.calcIntersection(triangle);
@@ -71,7 +72,7 @@ export default class Renderer {
                     })
                     if (lightRay.intersection == undefined) {
                         const angle = lightRay.direction.angleTo(intersection.triangle.normal);
-                        let color = ray.intersection.triangle.color.lightAtAngle(new Color(1, 1, 1), angle);
+                        let color = ray.intersection.triangle.color.lightAtAngle(light.color, angle);
                         this.pixel(x, y, color);
                     } else {
                         this.pixel(x, y, new Color(0, 0, 0));
