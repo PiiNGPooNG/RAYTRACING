@@ -37,10 +37,17 @@ function getCamera(visualScene: DaeVisualScene) {
     });
     const transform = new Matrix(cameraNode.matrix);
     const instance = cameraNode.instances[0];
-    const optics = collada.getCamera(instance.url).optics;
-    const camera = Camera.fromPerspective(optics.xfov, optics.aspectRatio, optics.znear, optics.zfar);
-    camera.moveTo(transform);
-    return camera;
+    const cameraObj = collada.getCamera(instance.url);
+    const optics = cameraObj.optics;
+    if (cameraObj.type === "perspective") {
+        const camera = Camera.fromPerspective(optics.xfov, optics.aspectRatio, optics.znear, optics.zfar);
+        camera.moveTo(transform);
+        return camera;
+    } else if (cameraObj.type === "orthographic") {
+        const camera = Camera.fromOrthographic(optics.xmag, optics.aspectRatio, optics.znear, optics.zfar);
+        camera.moveTo(transform);
+        return camera;
+    }
 }
 
 function getLights(visualScene: DaeVisualScene) {

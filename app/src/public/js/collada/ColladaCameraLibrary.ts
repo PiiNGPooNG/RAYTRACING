@@ -31,6 +31,21 @@ export default class ColladaCameraLibrary {
                     }
                 });
                 break;
+
+            case "orthographic":
+                const orthographicEl = techniqueEl.children[0];
+                this.cameras.push({
+                    id: id,
+                    type: "orthographic",
+                    optics: {
+                        xmag: parseFloat(orthographicEl.querySelector("xmag").textContent),
+                        aspectRatio: parseFloat(orthographicEl.querySelector("aspect_ratio").textContent),
+                        znear: parseFloat(orthographicEl.querySelector("znear").textContent),
+                        zfar: parseFloat(orthographicEl.querySelector("zfar").textContent)
+                    }
+                });
+                break;
+
         }
     }
 

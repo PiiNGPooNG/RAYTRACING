@@ -54,9 +54,10 @@ export interface DaeLight {
 
 export interface DaeCamera {
     id: string;
-    type: "perspective";
+    type: "perspective" | "orthographic";
     optics: {
-        xfov: number;
+        xmag?: number;
+        xfov?: number;
         aspectRatio: number;
         znear: number;
         zfar: number;

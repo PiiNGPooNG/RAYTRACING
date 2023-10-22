@@ -21,6 +21,18 @@ export default class Camera {
         return new Camera(perspective);
     }
 
+    static fromOrthographic(xmag: number, aspectRatio: number, znear: number, zfar: number) {
+        const right = xmag;
+        const top = right / aspectRatio;
+        const orthographic = new Matrix([
+            [1 / right, 0, 0, 0],
+            [0, 1 / top, 0, 0],
+            [0, 0, -2 / (zfar - znear), -(zfar + znear) / (zfar - znear)],
+            [0, 0, 0, 1]
+        ]);
+        return new Camera(orthographic);
+    }
+
     moveTo(transform: Matrix) {
         this._view = this.perspective.mult(transform.invert());
     }
