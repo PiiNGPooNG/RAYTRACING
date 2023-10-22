@@ -1,16 +1,13 @@
 import Vector3 from "./Vector3.js";
 import Triangle from "./Triangle.js";
 export default class Ray {
-    #origin: Vector3;
-    #direction: Vector3;
-
-    #intersection: Vector3;
-    #intersectionLambda: number;
-    #intersectedTriangle: Triangle;
+    readonly origin: Vector3;
+    readonly direction: Vector3;
+    private _intersection: Intersection;
 
     constructor(origin: Vector3, direction: Vector3) {
-        this.#origin = origin;
-        this.#direction = direction;
+        this.origin = origin;
+        this.direction = direction;
     }
 
     static between(from: Vector3, to: Vector3): Ray {
@@ -23,8 +20,8 @@ export default class Ray {
         let v = triangle.B.subtract(triangle.A);
         let w = triangle.C.subtract(triangle.A);
 
-        let p = this.#origin;
-        let u = this.#direction;
+        let p = this.origin;
+        let u = this.direction;
 
         let determinant = Vector3.determinant(u, v.negate(), w.negate());
         if (determinant === 0) {
@@ -36,7 +33,7 @@ export default class Ray {
         if (lambda <= 1e-10) {
             return;
         }
-        if (this.#intersectionLambda && this.#intersectionLambda < lambda) {
+        if (this._intersection && this._intersection.lambda < lambda) {
             return;
         }
 
@@ -51,17 +48,21 @@ export default class Ray {
         }
 
         if (mu + nu < 1) {
-            this.#intersection = p.add(u.multiplyBy(lambda));
-            this.#intersectionLambda = lambda;
-            this.#intersectedTriangle = triangle;
+            this._intersection = {
+                position: p.add(u.multiplyBy(lambda)),
+                lambda: lambda,
+                triangle: triangle
+            }
         }
     }
 
-    get intersection(): Vector3 {
-        return this.#intersection;
+    get intersection(): Intersection {
+        return this._intersection;
     }
+}
 
-    get intersectedTriangle(): Triangle {
-        return this.#intersectedTriangle;
-    }
+interface Intersection {
+    position: Vector3;
+    triangle: Triangle;
+    lambda: number;
 }
