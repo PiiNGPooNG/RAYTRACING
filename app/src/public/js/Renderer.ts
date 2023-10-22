@@ -47,7 +47,6 @@ export default class Renderer {
     }
 
     render(startX: number, startY: number, width: number, height: number) {
-        const camera = this.#scene.camera;
         const meshes = this.#scene.meshes;
         const lights = this.#scene.lights;
         for (let x = startX; x < startX + width; x++) {

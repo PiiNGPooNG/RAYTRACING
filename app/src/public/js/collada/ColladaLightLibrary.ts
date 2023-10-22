@@ -1,7 +1,11 @@
 import {DaeLight} from "./ColladaTypes";
 
 export default class ColladaLightLibrary {
-    lights: DaeLight[] = [];
+    lights: DaeLight[];
+
+    constructor(lights: DaeLight[] = []) {
+        this.lights = lights ?? [];
+    }
 
     parse(libraryLightEl: Element) {
         for (const child of libraryLightEl.children) {

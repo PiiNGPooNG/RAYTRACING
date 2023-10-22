@@ -1,3 +1,13 @@
+export interface DaeFull {
+    scene: DaeScene;
+    visualScenes: DaeVisualScene[];
+    cameras: DaeCamera[];
+    lights: DaeLight[];
+    effects: DaeEffect[];
+    materials: DaeMaterial[];
+    geometries: DaeGeometry[];
+}
+
 export interface DaeScene {
     visual?: string;
 }

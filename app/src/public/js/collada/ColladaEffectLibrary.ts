@@ -1,7 +1,11 @@
 import {DaeEffect} from "./ColladaTypes";
 
 export default class ColladaEffectLibrary {
-    effects: DaeEffect[] = [];
+    effects: DaeEffect[];
+
+    constructor(effects: DaeEffect[] = []) {
+        this.effects = effects ?? [];
+    }
 
     parse(libraryEffectEl: Element) {
         for (const child of libraryEffectEl.children) {

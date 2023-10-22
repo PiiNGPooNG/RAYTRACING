@@ -1,38 +1,36 @@
 import Mesh from "./Mesh.js";
-import Camera from "./Camera.js";
 import Light from "./Light.js";
-import PerspectiveCamera from "./PerspectiveCamera.js";
+import Camera from "./Camera.js";
 
 export default class Scene {
-    #camera: PerspectiveCamera;
-    #meshes: Mesh[] = [];
-    #lights: Light[] = [];
+    __class = "Scene";
+    private readonly _camera: Camera;
+    private _meshes: Mesh[] = [];
+    private _lights: Light[] = [];
 
-    constructor(camera: PerspectiveCamera) {
-        this.#camera = camera;
+    constructor(camera: Camera) {
+        this._camera = camera;
     }
 
     addMesh(mesh: Mesh): void {
-        mesh.triangles.forEach((triangle) => {
-            triangle.transform(this.#camera.view);
-        });
-        this.#meshes.push(mesh);
+        mesh.transform(this._camera.view);
+        this._meshes.push(mesh);
     }
 
     addLight(light: Light): void {
-        light.transform(this.#camera.view);
-        this.#lights.push(light);
+        light.transform(this._camera.view);
+        this._lights.push(light);
     }
 
     get meshes(): Mesh[] {
-        return this.#meshes;
+        return this._meshes;
     }
 
     get lights(): Light[] {
-        return this.#lights;
+        return this._lights;
     }
 
-    get camera(): PerspectiveCamera {
-        return this.#camera;
+    get camera(): Camera {
+        return this._camera;
     }
 }

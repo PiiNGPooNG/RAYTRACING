@@ -1,9 +1,7 @@
 import Job from './Job';
-import ColladaReader from "./ColladaReader.js";
-import Matrix from "./Matrix.js";
+import Collada from "./collada/Collada.js";
 
-let reader = new ColladaReader();
-await reader.open("/3d/simple-scene.dae");
+const collada = await Collada.fromPath("/3d/simple-scene.dae");
 
 const width = 640;
 const height = 360;
@@ -51,7 +49,7 @@ for (let i = 0; i < workerAmount; i++) {
     const worker = new Worker("/js/worker.js", {type: "module"});
     worker.postMessage({
         type: "setup",
-        scene: reader.scene,
+        dae: collada.asObject(),
         width: width,
         height: height,
         buffer: sharedBuffer

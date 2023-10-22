@@ -1,7 +1,11 @@
 import {DaeVisualScene} from "./ColladaTypes";
 
 export default class ColladaVisualSceneLibrary {
-    visualScenes: DaeVisualScene[] = [];
+    visualScenes: DaeVisualScene[];
+
+    constructor(visualScenes: DaeVisualScene[] = []) {
+        this.visualScenes = visualScenes ?? [];
+    }
 
     parse(libraryVisualSceneEl: Element) {
         for (const child of libraryVisualSceneEl.children) {

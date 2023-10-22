@@ -1,4 +1,13 @@
-import {DaeCamera, DaeEffect, DaeGeometry, DaeLight, DaeMaterial, DaeScene, DaeVisualScene} from "./ColladaTypes";
+import {
+    DaeCamera,
+    DaeEffect,
+    DaeFull,
+    DaeGeometry,
+    DaeLight,
+    DaeMaterial,
+    DaeScene,
+    DaeVisualScene
+} from "./ColladaTypes";
 import ColladaGeometryLibrary from "./ColladaGeometryLibrary.js";
 import ColladaLightLibrary from "./ColladaLightLibrary.js";
 import ColladaCameraLibrary from "./ColladaCameraLibrary.js";
@@ -8,12 +17,12 @@ import ColladaVisualSceneLibrary from "./ColladaVisualSceneLibrary.js";
 
 export default class Collada {
     scene: DaeScene = {};
-    visualScenes: ColladaVisualSceneLibrary;
-    cameras: ColladaCameraLibrary;
-    lights: ColladaLightLibrary;
-    effects: ColladaEffectLibrary;
-    materials: ColladaMaterialLibrary;
-    geometries: ColladaGeometryLibrary;
+    visualSceneLibrary: ColladaVisualSceneLibrary;
+    cameraLibrary: ColladaCameraLibrary;
+    lightLibrary: ColladaLightLibrary;
+    effectLibrary: ColladaEffectLibrary;
+    materialLibrary: ColladaMaterialLibrary;
+    geometryLibrary: ColladaGeometryLibrary;
 
     static async fromPath(path: string): Promise<Collada> {
         const response = await fetch(path);
@@ -42,6 +51,18 @@ export default class Collada {
         return collada;
     }
 
+    static fromObject(object: DaeFull) {
+        const collada = new Collada();
+        collada.scene = object.scene;
+        collada.visualSceneLibrary = new ColladaVisualSceneLibrary(object.visualScenes);
+        collada.cameraLibrary = new ColladaCameraLibrary(object.cameras);
+        collada.lightLibrary = new ColladaLightLibrary(object.lights);
+        collada.effectLibrary = new ColladaEffectLibrary(object.effects);
+        collada.materialLibrary = new ColladaMaterialLibrary(object.materials);
+        collada.geometryLibrary = new ColladaGeometryLibrary(object.geometries);
+        return collada;
+    }
+
     parse(colladaEl: Element) {
         for (const child of colladaEl.children) {
             switch (child.tagName) {
@@ -51,35 +72,47 @@ export default class Collada {
                     break;
 
                 case "library_visual_scenes":
-                    this.visualScenes = new ColladaVisualSceneLibrary();
-                    this.visualScenes.parse(child);
+                    this.visualSceneLibrary = new ColladaVisualSceneLibrary();
+                    this.visualSceneLibrary.parse(child);
                     break;
 
                 case "library_cameras":
-                    this.cameras = new ColladaCameraLibrary();
-                    this.cameras.parse(child);
+                    this.cameraLibrary = new ColladaCameraLibrary();
+                    this.cameraLibrary.parse(child);
                     break;
 
                 case "library_lights":
-                    this.lights = new ColladaLightLibrary();
-                    this.lights.parse(child);
+                    this.lightLibrary = new ColladaLightLibrary();
+                    this.lightLibrary.parse(child);
                     break;
 
                 case "library_effects":
-                    this.effects = new ColladaEffectLibrary();
-                    this.effects.parse(child);
+                    this.effectLibrary = new ColladaEffectLibrary();
+                    this.effectLibrary.parse(child);
                     break;
 
                 case "library_materials":
-                    this.materials = new ColladaMaterialLibrary();
-                    this.materials.parse(child);
+                    this.materialLibrary = new ColladaMaterialLibrary();
+                    this.materialLibrary.parse(child);
                     break;
 
                 case "library_geometries":
-                    this.geometries = new ColladaGeometryLibrary();
-                    this.geometries.parse(child);
+                    this.geometryLibrary = new ColladaGeometryLibrary();
+                    this.geometryLibrary.parse(child);
                     break;
             }
+        }
+    }
+
+    asObject(): DaeFull {
+        return {
+            scene: this.scene,
+            visualScenes: this.visualSceneLibrary.visualScenes,
+            cameras: this.cameraLibrary.cameras,
+            lights: this.lightLibrary.lights,
+            effects: this.effectLibrary.effects,
+            materials: this.materialLibrary.materials,
+            geometries: this.geometryLibrary.geometries
         }
     }
 
@@ -88,29 +121,29 @@ export default class Collada {
     }
 
     getVisualScene(id: string): DaeVisualScene {
-        return this.visualScenes.getById(id);
+        return this.visualSceneLibrary.getById(id);
     }
 
     getCamera(id: string): DaeCamera {
-        return this.cameras.getById(id);
+        return this.cameraLibrary.getById(id);
     }
 
     getLight(id: string): DaeLight {
-        return this.lights.getById(id);
+        return this.lightLibrary.getById(id);
     }
 
     getEffect(id: string): DaeEffect {
-        return this.effects.getById(id);
+        return this.effectLibrary.getById(id);
     }
 
     getEffectByMaterial(materialId: string): DaeEffect {
-        return this.effects.getById(this.materials.getById(materialId).effect);
+        return this.effectLibrary.getById(this.materialLibrary.getById(materialId).effect);
     }
 
     getMaterial(id: string): DaeMaterial {
-        return this.materials.getById(id);
+        return this.materialLibrary.getById(id);
     }
     getGeometry(id: string): DaeGeometry {
-        return this.geometries.getById(id);
+        return this.geometryLibrary.getById(id);
     }
 }

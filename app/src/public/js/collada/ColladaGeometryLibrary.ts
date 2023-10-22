@@ -1,7 +1,11 @@
 import {DaeGeometry} from "./ColladaTypes";
 
 export default class ColladaGeometryLibrary {
-    geometries: DaeGeometry[] = [];
+    geometries: DaeGeometry[];
+
+    constructor(geometries: DaeGeometry[] = []) {
+        this.geometries = geometries ?? [];
+    }
 
     parse(libraryGeometryEl: Element) {
         for (const child of libraryGeometryEl.children) {

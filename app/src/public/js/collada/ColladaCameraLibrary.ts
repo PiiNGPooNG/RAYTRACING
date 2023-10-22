@@ -1,7 +1,11 @@
 import {DaeCamera} from "./ColladaTypes";
 
 export default class ColladaCameraLibrary {
-    cameras: DaeCamera[] = [];
+    cameras: DaeCamera[];
+
+    constructor(cameras: DaeCamera[] = []) {
+        this.cameras = cameras ?? [];
+    }
 
     parse(libraryCamerasEl: Element) {
         for (const child of libraryCamerasEl.children) {

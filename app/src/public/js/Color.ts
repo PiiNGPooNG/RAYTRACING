@@ -1,31 +1,19 @@
 export default class Color {
-    #r: number;
-    #g: number;
-    #b: number;
+    readonly r: number;
+    readonly g: number;
+    readonly b: number;
 
     constructor(r: number, g: number, b: number) {
-        this.#r = Math.min(1, Math.max(0, r));
-        this.#g = Math.min(1, Math.max(0, g));
-        this.#b = Math.min(1, Math.max(0, b));
-    }
-
-    get r(): number {
-        return this.#r;
-    }
-
-    get g(): number {
-        return this.#g;
-    }
-
-    get b(): number {
-        return this.#b;
+        this.r = Math.min(1, Math.max(0, r));
+        this.g = Math.min(1, Math.max(0, g));
+        this.b = Math.min(1, Math.max(0, b));
     }
 
     static interpolate(color1: Color, color2: Color, t: number): Color {
         return new Color(
-            (1 - t) * color1.#r + t * color2.#r,
-            (1 - t) * color1.#g + t * color2.#g,
-            (1 - t) * color1.#b + t * color2.#b
+            (1 - t) * color1.r + t * color2.r,
+            (1 - t) * color1.g + t * color2.g,
+            (1 - t) * color1.b + t * color2.b
         )
     }
 }

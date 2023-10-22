@@ -1,7 +1,11 @@
 import {DaeMaterial} from "./ColladaTypes";
 
 export default class ColladaMaterialLibrary {
-    materials: DaeMaterial[] = [];
+    materials: DaeMaterial[];
+
+    constructor(materials: DaeMaterial[] = []) {
+        this.materials = materials ?? [];
+    }
 
     parse(libraryMaterialEl: Element) {
         for (const child of libraryMaterialEl.children) {

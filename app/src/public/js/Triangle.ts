@@ -3,43 +3,39 @@ import Vector3 from "./Vector3.js";
 import Matrix from "./Matrix.js";
 
 export default class Triangle {
-    #A: Vector3;
-    #B: Vector3;
-    #C: Vector3;
-    #color: Color;
+    private _A: Vector3;
+    private _B: Vector3;
+    private _C: Vector3;
+    readonly color: Color;
 
     constructor(A: Vector3, B: Vector3, C: Vector3, color: Color) {
-        this.#A = A;
-        this.#B = B;
-        this.#C = C;
-        this.#color = color;
+        this._A = A;
+        this._B = B;
+        this._C = C;
+        this.color = color;
     }
 
     get A(): Vector3 {
-        return this.#A;
+        return this._A;
     }
 
     get B(): Vector3 {
-        return this.#B;
+        return this._B;
     }
 
     get C(): Vector3 {
-        return this.#C;
-    }
-
-    get color(): Color {
-        return this.#color;
+        return this._C;
     }
 
     translate(translation: Vector3): void {
-        this.#A = this.#A.add(translation);
-        this.#B = this.#B.add(translation);
-        this.#C = this.#C.add(translation)
+        this._A = this._A.add(translation);
+        this._B = this._B.add(translation);
+        this._C = this._C.add(translation)
     }
 
     transform(matrix: Matrix) {
-        this.#A = matrix.transform(this.#A);
-        this.#B = matrix.transform(this.#B);
-        this.#C = matrix.transform(this.#C);
+        this._A = matrix.transform(this._A);
+        this._B = matrix.transform(this._B);
+        this._C = matrix.transform(this._C);
     }
 }
