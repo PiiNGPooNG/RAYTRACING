@@ -99,6 +99,17 @@ export default class Matrix {
         return new Matrix(rawOut);
     }
 
+    transpose() {
+        const transposedMatrix = [];
+        for (let j = 0; j < this.n; j++) {
+            transposedMatrix[j] = [];
+            for (let i = 0; i < this.m; i++) {
+                transposedMatrix[j][i] = this.matrix[i][j];
+            }
+        }
+        return new Matrix(transposedMatrix);
+    }
+
     transform(v: Vector3) {
         if (this.m != 4 || this.n != 4) {
             throw new Error("Can't use this matrix to transform Vector3");
