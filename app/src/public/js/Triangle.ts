@@ -31,9 +31,9 @@ export default class Triangle {
         return this._A.normal;
     }
 
-    transform(matrix: Matrix) {
-        this._A.transform(matrix);
-        this._B.transform(matrix);
-        this._C.transform(matrix);
+    transform(transform: Matrix, normalTransform: Matrix) {
+        this._A.transform(transform, normalTransform);
+        this._B.transform(transform, normalTransform);
+        this._C.transform(transform, normalTransform);
     }
 }

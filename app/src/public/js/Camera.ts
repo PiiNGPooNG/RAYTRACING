@@ -2,11 +2,13 @@ import Matrix from "./Matrix.js";
 
 export default class Camera {
     private perspective: Matrix;
-    private _view: Matrix;
+    private _transform: Matrix;
+    private _normalTransform: Matrix;
 
     constructor(perspective: Matrix) {
         this.perspective = perspective;
-        this._view = perspective;
+        this._transform = perspective;
+        this._normalTransform = perspective.partial(3, 3).inverse().transpose();
     }
 
     static fromPerspective(xfov: number, aspectRatio: number, znear: number, zfar: number) {
@@ -34,10 +36,15 @@ export default class Camera {
     }
 
     moveTo(transform: Matrix) {
-        this._view = this.perspective.mult(transform.invert());
+        this._transform = this.perspective.mult(transform.inverse());
+        this._normalTransform = this.perspective.partial(3, 3).mult(transform.partial(3, 3).inverse()).inverse().transpose();
     }
 
-    get view() {
-        return this._view;
+    get transform() {
+        return this._transform;
+    }
+
+    get normalTransform() {
+        return this._normalTransform;
     }
 }

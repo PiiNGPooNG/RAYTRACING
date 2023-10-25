@@ -12,12 +12,12 @@ export default class Scene {
     }
 
     addMesh(mesh: Mesh): void {
-        mesh.transform(this._camera.view);
+        mesh.transform(this._camera.transform, this._camera.normalTransform);
         this._meshes.push(mesh);
     }
 
     addLight(light: Light): void {
-        light.transform(this._camera.view);
+        light.transform(this._camera.transform);
         this._lights.push(light);
     }
 

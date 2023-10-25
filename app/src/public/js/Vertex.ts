@@ -18,8 +18,8 @@ export default class Vertex {
         return this._normal;
     }
 
-    transform(matrix: Matrix) {
-        this._position = matrix.transform(this._position);
-        this._normal = matrix.transformNormal(this._normal);
+    transform(transform: Matrix, normalTransform: Matrix) {
+        this._position = transform.transform(this._position);
+        this._normal = normalTransform.transformNormal(this._normal);
     }
 }

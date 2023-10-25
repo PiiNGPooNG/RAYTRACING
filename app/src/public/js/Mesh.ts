@@ -8,9 +8,9 @@ export default class Mesh {
         this.triangles = triangles;
     }
 
-    transform(matrix: Matrix) {
+    transform(transform: Matrix, normalTransform: Matrix) {
         for (const triangle of this.triangles) {
-            triangle.transform(matrix);
+            triangle.transform(transform, normalTransform);
         }
     }
 }
