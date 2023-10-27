@@ -9,6 +9,7 @@ import Color from "./Color.js";
 import Triangle from "./Triangle.js";
 import Vertex from "./Vertex.js";
 import OrthoCamera from "./OrthoCamera.js";
+import PerspectiveCamera from "./PerspectiveCamera.js";
 import {DaeFull, DaeVisualScene} from "./collada/ColladaTypes";
 
 
@@ -43,6 +44,8 @@ function getCamera(visualScene: DaeVisualScene) {
     const optics = cameraObj.optics;
     if (cameraObj.type === "orthographic") {
         return new OrthoCamera(optics.xmag, optics.aspectRatio, transform);
+    } else if (cameraObj.type === "perspective") {
+        return new PerspectiveCamera(optics.xfov, optics.aspectRatio, transform);
     }
 }
 

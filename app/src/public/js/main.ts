@@ -4,7 +4,7 @@ import Collada from "./collada/Collada.js";
 const collada = await Collada.fromPath("/3d/simple-scene.dae");
 
 const width = 400;
-const height = 240;
+const height = 225;
 const displayFactor = 1;
 
 const canvas = document.querySelector("canvas");

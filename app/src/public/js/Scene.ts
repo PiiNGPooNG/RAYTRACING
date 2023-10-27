@@ -1,15 +1,15 @@
 import Mesh from "./Mesh.js";
 import PointLight from "./PointLight.js";
 import DirLight from "./DirLight.js";
-import OrthoCamera from "./OrthoCamera.js";
+import {Camera} from "./types";
 
 export default class Scene {
-    private readonly _camera: OrthoCamera;
+    private readonly _camera: Camera;
     private _meshes: Mesh[] = [];
     private _lights: PointLight[] = [];
     private _dirLights: DirLight[] = [];
 
-    constructor(camera: OrthoCamera) {
+    constructor(camera: Camera) {
         this._camera = camera;
     }
 
@@ -37,7 +37,7 @@ export default class Scene {
         return this._dirLights;
     }
 
-    get camera(): OrthoCamera {
+    get camera(): Camera {
         return this._camera;
     }
 }
