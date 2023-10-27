@@ -1,7 +1,7 @@
 import Job from './Job';
 import Collada from "./collada/Collada.js";
 
-const collada = await Collada.fromPath("/3d/donut.dae");
+const collada = await Collada.fromPath("/3d/simple-scene.dae");
 
 const width = 640;
 const height = 360;
@@ -46,7 +46,7 @@ jobs.reverse();
 
 //jobs.sort(() => Math.random() - 0.5);
 
-const workerAmount = 6;
+const workerAmount = 10;
 const workers: Array<Worker> = [];
 for (let i = 0; i < workerAmount; i++) {
     const worker = new Worker("/js/worker.js", {type: "module"});

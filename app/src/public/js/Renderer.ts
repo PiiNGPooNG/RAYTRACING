@@ -42,21 +42,22 @@ export default class Renderer {
                 });
                 let intersection = ray.intersection;
                 if (intersection) {
-                    let light = lights[0];
-                    let lightRay = light.getRay(intersection.position);
-                    meshes.forEach((mesh) => {
-                        mesh.triangles.forEach((triangle) => {
-                           lightRay.calcIntersection(triangle);
-                        });
-                    })
-                    if (lightRay.intersection === undefined) {
-                        let dot = lightRay.direction.angleTo(intersection.triangle.normal);
-                        dot = Math.max(dot, 0);
-                        let color = ray.intersection.triangle.color.lightAtAngle(light.color, dot);
-                        this.pixel(x, y, color);
-                    } else {
-                        this.pixel(x, y, new Color(0, 0, 0));
+                    let finalColor = new Color(0, 0, 0);
+                    for (const light of lights) {
+                        let lightRay = light.getRay(intersection.position);
+                        meshes.forEach((mesh) => {
+                            mesh.triangles.forEach((triangle) => {
+                                lightRay.calcIntersection(triangle);
+                            });
+                        })
+                        if (lightRay.intersection === undefined) {
+                            let dot = lightRay.direction.angleTo(intersection.triangle.normal);
+                            dot = Math.max(dot, 0);
+                            let color = ray.intersection.triangle.color.lightAtAngle(light.color, dot);
+                            finalColor.add(color);
+                        }
                     }
+                    this.pixel(x, y, finalColor);
                 }
             }
         }
