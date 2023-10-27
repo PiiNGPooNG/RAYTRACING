@@ -1,13 +1,10 @@
 import Mesh from "./Mesh.js";
-import PointLight from "./PointLight.js";
-import DirLight from "./DirLight.js";
-import {Camera} from "./types";
+import {Camera, Light} from "./types";
 
 export default class Scene {
     private readonly _camera: Camera;
     private _meshes: Mesh[] = [];
-    private _lights: PointLight[] = [];
-    private _dirLights: DirLight[] = [];
+    private _lights: Light[] = [];
 
     constructor(camera: Camera) {
         this._camera = camera;
@@ -18,23 +15,17 @@ export default class Scene {
         this._meshes.push(mesh);
     }
 
-    addLight(light: PointLight | DirLight): void {
-        if (light instanceof  DirLight) {
-            light.transform(this._camera.viewMatrix);
-            this._dirLights.push(light);
-        }
+    addLight(light: Light): void {
+        light.transform(this._camera.viewMatrix);
+        this._lights.push(light);
     }
 
     get meshes(): Mesh[] {
         return this._meshes;
     }
 
-    get lights(): PointLight[] {
+    get lights(): Light[] {
         return this._lights;
-    }
-
-    get dirLights(): DirLight[] {
-        return this._dirLights;
     }
 
     get camera(): Camera {

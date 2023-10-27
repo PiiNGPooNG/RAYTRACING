@@ -11,6 +11,7 @@ import Vertex from "./Vertex.js";
 import OrthoCamera from "./OrthoCamera.js";
 import PerspectiveCamera from "./PerspectiveCamera.js";
 import {DaeFull, DaeVisualScene} from "./collada/ColladaTypes";
+import {Light} from "./types";
 
 
 let collada: Collada;
@@ -50,7 +51,7 @@ function getCamera(visualScene: DaeVisualScene) {
 }
 
 function getLights(visualScene: DaeVisualScene) {
-    const lights: (PointLight|DirLight)[] = [];
+    const lights: Light[] = [];
     const lightNodes = visualScene.nodes.filter(node => {
         return node.instances.map(instance => instance.type).includes("light");
     });
@@ -61,9 +62,12 @@ function getLights(visualScene: DaeVisualScene) {
         });
         for (const instance of instances) {
             const lightObj = collada.getLight(instance.url);
+            const color = new Color(lightObj.color.r, lightObj.color.g, lightObj.color.b);
             if (lightObj.type === "directional") {
-                const color = new Color(lightObj.color.r, lightObj.color.g, lightObj.color.b);
                 const light = new DirLight(new Vector3(0, 0, 1), color, transform);
+                lights.push(light);
+            } else if (lightObj.type === "point") {
+                const light = new PointLight(new Vector3(0, 0, 0), color, transform);
                 lights.push(light);
             }
         }

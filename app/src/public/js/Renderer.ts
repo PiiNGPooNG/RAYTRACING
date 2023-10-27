@@ -1,6 +1,4 @@
 import Color from "./Color.js";
-import Ray from "./Ray.js";
-import Vector3 from "./Vector3.js";
 import Scene from "./Scene.js";
 
 let counter = 0;
@@ -32,7 +30,7 @@ export default class Renderer {
 
     render(startX: number, startY: number, width: number, height: number) {
         const meshes = this.#scene.meshes;
-        const dirLights = this.#scene.dirLights;
+        const lights = this.#scene.lights;
         for (let x = startX; x < startX + width; x++) {
             for (let y = startY; y < startY + height; y++) {
                 let ray = this.#scene.camera.getRay(x, y, this.width, this.height)
@@ -44,11 +42,8 @@ export default class Renderer {
                 });
                 let intersection = ray.intersection;
                 if (intersection) {
-                    let light = dirLights[0];
-                    let lightRay = new Ray(intersection.position, light.direction);
-                    if (counter < 10 && this.#scene.meshes[0].triangles[10] == intersection.triangle) {
-                        counter++
-                    }
+                    let light = lights[0];
+                    let lightRay = light.getRay(intersection.position);
                     meshes.forEach((mesh) => {
                         mesh.triangles.forEach((triangle) => {
                            lightRay.calcIntersection(triangle);
@@ -57,7 +52,6 @@ export default class Renderer {
                     if (lightRay.intersection === undefined) {
                         let dot = lightRay.direction.angleTo(intersection.triangle.normal);
                         dot = Math.max(dot, 0);
-                        //dot = (dot + 1) / 2;
                         let color = ray.intersection.triangle.color.lightAtAngle(light.color, dot);
                         this.pixel(x, y, color);
                     } else {
