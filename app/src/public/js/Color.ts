@@ -17,11 +17,11 @@ export default class Color {
         )
     }
 
-    lightAtAngle(lightColor: Color, angle: number) {
+    lightAtAngle(lightColor: Color, dot: number) {
         return new Color(
-            this.r * lightColor.r * Math.cos(angle),
-            this.g * lightColor.g * Math.cos(angle),
-            this.b * lightColor.b * Math.cos(angle)
+            this.r * lightColor.r * dot,
+            this.g * lightColor.g * dot,
+            this.b * lightColor.b * dot
         );
     }
 }

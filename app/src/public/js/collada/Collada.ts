@@ -107,12 +107,12 @@ export default class Collada {
     asObject(): DaeFull {
         return {
             scene: this.scene,
-            visualScenes: this.visualSceneLibrary.visualScenes,
-            cameras: this.cameraLibrary.cameras,
-            lights: this.lightLibrary.lights,
-            effects: this.effectLibrary.effects,
-            materials: this.materialLibrary.materials,
-            geometries: this.geometryLibrary.geometries
+            visualScenes: this.visualSceneLibrary?.visualScenes,
+            cameras: this.cameraLibrary?.cameras,
+            lights: this.lightLibrary?.lights,
+            effects: this.effectLibrary?.effects,
+            materials: this.materialLibrary?.materials,
+            geometries: this.geometryLibrary?.geometries
         }
     }
 

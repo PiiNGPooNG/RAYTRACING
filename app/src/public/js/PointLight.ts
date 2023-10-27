@@ -2,7 +2,7 @@ import Vector3 from "./Vector3.js";
 import Matrix from "./Matrix.js";
 import Color from "./Color.js";
 
-export default class Light {
+export default class PointLight {
     private _position: Vector3;
     private _color: Color;
 

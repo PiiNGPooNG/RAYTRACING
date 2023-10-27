@@ -1,6 +1,6 @@
 import Matrix from "./Matrix.js";
 
-export default class Camera {
+export default class OldCamera {
     private perspective: Matrix;
     private _transform: Matrix;
     private _normalTransform: Matrix;
@@ -20,7 +20,7 @@ export default class Camera {
             [0, 0, -(zfar + znear) / (zfar - znear), 2 * zfar * znear / (znear - zfar)],
             [0, 0, -1, 0]
         ]);
-        return new Camera(perspective);
+        return new OldCamera(perspective);
     }
 
     static fromOrthographic(xmag: number, aspectRatio: number, znear: number, zfar: number) {
@@ -32,7 +32,7 @@ export default class Camera {
             [0, 0, -2 / (zfar - znear), -(zfar + znear) / (zfar - znear)],
             [0, 0, 0, 1]
         ]);
-        return new Camera(orthographic);
+        return new OldCamera(orthographic);
     }
 
     moveTo(transform: Matrix) {

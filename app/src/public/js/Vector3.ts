@@ -42,7 +42,7 @@ export default class Vector3 {
     }
 
     angleTo(other: Vector3) {
-        return Math.max(Math.acos(this.dot(other) / (this.norm() * other.norm())), 0);
+        return this.dot(other) / (this.norm() * other.norm());
     }
 
     norm() {

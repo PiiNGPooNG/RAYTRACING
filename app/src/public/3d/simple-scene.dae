@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 3.6.4 commit date:2023-09-25, commit time:13:24, hash:21bfc5e7fe3f</authoring_tool>
     </contributor>
-    <created>2023-10-22T17:25:07</created>
-    <modified>2023-10-22T17:25:07</modified>
+    <created>2023-10-27T18:24:12</created>
+    <modified>2023-10-27T18:24:12</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -14,12 +14,12 @@
     <camera id="Camera-camera" name="Camera">
       <optics>
         <technique_common>
-          <perspective>
-            <xfov sid="xfov">39.59775</xfov>
+          <orthographic>
+            <xmag sid="xmag">4.257143</xmag>
             <aspect_ratio>1.777778</aspect_ratio>
             <znear sid="znear">0.1</znear>
-            <zfar sid="zfar">100</zfar>
-          </perspective>
+            <zfar sid="zfar">20</zfar>
+          </orthographic>
         </technique_common>
       </optics>
       <extra>
@@ -32,18 +32,15 @@
     </camera>
   </library_cameras>
   <library_lights>
-    <light id="Light-light" name="Light">
+    <light id="Sun-light" name="Sun">
       <technique_common>
-        <point>
-          <color sid="color">1000 1000 1000</color>
-          <constant_attenuation>1</constant_attenuation>
-          <linear_attenuation>0</linear_attenuation>
-          <quadratic_attenuation>0.00111109</quadratic_attenuation>
-        </point>
+        <directional>
+          <color sid="color">1 1 1</color>
+        </directional>
       </technique_common>
       <extra>
         <technique profile="blender">
-          <type sid="type" type="int">0</type>
+          <type sid="type" type="int">1</type>
           <flag sid="flag" type="int">0</flag>
           <mode sid="mode" type="int">1</mode>
           <gamma sid="blender_gamma" type="float">1</gamma>
@@ -53,24 +50,24 @@
           <shadow_r sid="blender_shadow_r" type="float">0</shadow_r>
           <shadow_g sid="blender_shadow_g" type="float">0</shadow_g>
           <shadow_b sid="blender_shadow_b" type="float">0</shadow_b>
-          <energy sid="blender_energy" type="float">1000</energy>
-          <dist sid="blender_dist" type="float">29.99998</dist>
-          <spotsize sid="spotsize" type="float">75</spotsize>
+          <energy sid="blender_energy" type="float">1</energy>
+          <dist sid="blender_dist" type="float">12.5</dist>
+          <spotsize sid="spotsize" type="float">45</spotsize>
           <spotblend sid="spotblend" type="float">0.15</spotblend>
           <att1 sid="att1" type="float">0</att1>
           <att2 sid="att2" type="float">1</att2>
           <falloff_type sid="falloff_type" type="int">2</falloff_type>
           <clipsta sid="clipsta" type="float">0.04999995</clipsta>
-          <clipend sid="clipend" type="float">30.002</clipend>
+          <clipend sid="clipend" type="float">40</clipend>
           <bias sid="bias" type="float">1</bias>
-          <bufsize sid="bufsize" type="int">2880</bufsize>
+          <bufsize sid="bufsize" type="int">512</bufsize>
           <samp sid="samp" type="int">3</samp>
           <buffers sid="buffers" type="int">1</buffers>
-          <radius sid="radius" type="float">0.1</radius>
-          <area_shape sid="area_shape" type="int">1</area_shape>
-          <area_size sid="area_size" type="float">0.1</area_size>
-          <area_sizey sid="area_sizey" type="float">0.1</area_sizey>
-          <area_sizez sid="area_sizez" type="float">1</area_sizez>
+          <radius sid="radius" type="float">0</radius>
+          <area_shape sid="area_shape" type="int">0</area_shape>
+          <area_size sid="area_size" type="float">0.125</area_size>
+          <area_sizey sid="area_sizey" type="float">0.125</area_sizey>
+          <area_sizez sid="area_sizez" type="float">0.125</area_sizez>
         </technique>
       </extra>
     </light>
@@ -394,6 +391,10 @@
   </library_geometries>
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
+      <node id="Sun" name="Sun" type="NODE">
+        <matrix sid="transform">0.7071068 0 0.7071068 0 0 1 0 0 -0.7071068 0 0.7071068 0 0 0 0 1</matrix>
+        <instance_light url="#Sun-light"/>
+      </node>
       <node id="Cone" name="Cone" type="NODE">
         <matrix sid="transform">1 0 0 2.428459 0 1 0 -0.09049332 0 0 1 1 0 0 0 1</matrix>
         <instance_geometry url="#Cone-mesh" name="Cone">
@@ -443,12 +444,8 @@
         </instance_geometry>
       </node>
       <node id="Camera" name="Camera" type="NODE">
-        <matrix sid="transform">0.8453363 -0.2378789 0.4783514 5.040022 0.5342345 0.3764023 -0.7569113 -8.426725 6.91271e-7 0.8953965 0.4452697 5.644511 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0 0 0.6156615 -0.7880107 -5 0 0.7880107 0.6156615 5 0 0 0 1</matrix>
         <instance_camera url="#Camera-camera"/>
-      </node>
-      <node id="Light" name="Light" type="NODE">
-        <matrix sid="transform">-0.2908646 -0.7711008 0.5663932 4.824773 0.9551712 -0.1998834 0.2183912 -5.606191 -0.05518906 0.6045247 0.7946723 4.185734 0 0 0 1</matrix>
-        <instance_light url="#Light-light"/>
       </node>
       <node id="Cube" name="Cube" type="NODE">
         <matrix sid="transform">1 0 0 -2.453732 0 1 0 0.4913475 0 0 1 1 0 0 0 1</matrix>

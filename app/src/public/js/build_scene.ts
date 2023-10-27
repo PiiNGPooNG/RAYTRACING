@@ -2,12 +2,13 @@ import Collada from "./collada/Collada.js";
 import Matrix from "./Matrix.js";
 import Vector3 from "./Vector3.js";
 import Scene from "./Scene.js";
-import Camera from "./Camera.js";
-import Light from "./Light.js";
+import PointLight from "./PointLight.js";
+import DirLight from "./DirLight.js";
 import Mesh from "./Mesh.js";
 import Color from "./Color.js";
 import Triangle from "./Triangle.js";
 import Vertex from "./Vertex.js";
+import OrthoCamera from "./OrthoCamera.js";
 import {DaeFull, DaeVisualScene} from "./collada/ColladaTypes";
 
 
@@ -40,19 +41,13 @@ function getCamera(visualScene: DaeVisualScene) {
     const instance = cameraNode.instances[0];
     const cameraObj = collada.getCamera(instance.url);
     const optics = cameraObj.optics;
-    if (cameraObj.type === "perspective") {
-        const camera = Camera.fromPerspective(optics.xfov, optics.aspectRatio, optics.znear, optics.zfar);
-        camera.moveTo(transform);
-        return camera;
-    } else if (cameraObj.type === "orthographic") {
-        const camera = Camera.fromOrthographic(optics.xmag, optics.aspectRatio, optics.znear, optics.zfar);
-        camera.moveTo(transform);
-        return camera;
+    if (cameraObj.type === "orthographic") {
+        return new OrthoCamera(optics.xmag, optics.aspectRatio, transform);
     }
 }
 
 function getLights(visualScene: DaeVisualScene) {
-    const lights: Light[] = [];
+    const lights: (PointLight|DirLight)[] = [];
     const lightNodes = visualScene.nodes.filter(node => {
         return node.instances.map(instance => instance.type).includes("light");
     });
@@ -63,10 +58,11 @@ function getLights(visualScene: DaeVisualScene) {
         });
         for (const instance of instances) {
             const lightObj = collada.getLight(instance.url);
-            const color = new Color(lightObj.color.r, lightObj.color.g, lightObj.color.b);
-            const light = new Light(new Vector3(0, 0, 0), color);
-            light.transform(transform);
-            lights.push(light);
+            if (lightObj.type === "directional") {
+                const color = new Color(lightObj.color.r, lightObj.color.g, lightObj.color.b);
+                const light = new DirLight(new Vector3(0, 0, 1), color, transform);
+                lights.push(light);
+            }
         }
     }
     return lights;
@@ -122,8 +118,7 @@ function getMeshes(visualScene: DaeVisualScene) {
                         color
                     ));
                 }
-                const mesh = new Mesh(actualTriangles);
-                mesh.transform(transform, normalTransform);
+                const mesh = new Mesh(actualTriangles, transform);
                 meshes.push(mesh);
             }
         }

@@ -126,7 +126,7 @@ export default class Matrix {
 
     transform(v: Vector3) {
         if (this.m != 4 || this.n != 4) {
-            throw new Error("Can't use this matrix to transform Vector3");
+            throw new Error(`Can't use this matrix to transform Vector3 (${this.m}x${this.n})`);
         }
         const m = this.matrix;
         const w = m[3][0] * v.x + m[3][1] * v.y + m[3][2] * v.z + m[3][3];
@@ -139,7 +139,7 @@ export default class Matrix {
 
     transformNormal(v: Vector3) {
         if (this.m != 3 || this.n != 3) {
-            throw new Error("Can't use this matrix to transform Vector3");
+            throw new Error(`Can't use this matrix to transform (normal)F Vector3 (${this.m}x${this.n})`);
         }
         const m = this.matrix;
         return new Vector3(

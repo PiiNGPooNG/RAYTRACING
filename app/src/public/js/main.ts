@@ -3,8 +3,8 @@ import Collada from "./collada/Collada.js";
 
 const collada = await Collada.fromPath("/3d/simple-scene.dae");
 
-const width = 640;
-const height = 360;
+const width = 400;
+const height = 240;
 const displayFactor = 1;
 
 const canvas = document.querySelector("canvas");
@@ -28,18 +28,21 @@ const sharedBuffer = new SharedArrayBuffer(width * height * 4);
 const imageData = ctx.getImageData(0, 0, width, height);
 const pixels = new Uint8ClampedArray(sharedBuffer);
 
+const jobSize = 40;
 const jobs: Array<Job> = [];
 
-for (let x = 0; x < width; x += 50) {
-    for (let y = 0; y < height; y += 50) {
+for (let x = 0; x < width; x += jobSize) {
+    for (let y = 0; y < height; y += jobSize) {
         jobs.push({
             x: x,
             y: y,
-            width: Math.min(50, width - x),
-            height: Math.min(50, height - y)
+            width: Math.min(jobSize, width - x),
+            height: Math.min(jobSize, height - y)
         });
     }
 }
+
+jobs.reverse();
 
 //jobs.sort(() => Math.random() - 0.5);
 

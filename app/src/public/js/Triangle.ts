@@ -1,6 +1,6 @@
 import Color from "./Color.js";
-import Matrix from "./Matrix.js";
 import Vertex from "./Vertex.js";
+import ModelViewMatrix from "./ModelViewMatrix.js";
 
 export default class Triangle {
     private _A: Vertex;
@@ -31,9 +31,9 @@ export default class Triangle {
         return this._A.normal;
     }
 
-    transform(transform: Matrix, normalTransform: Matrix) {
-        this._A.transform(transform, normalTransform);
-        this._B.transform(transform, normalTransform);
-        this._C.transform(transform, normalTransform);
+    transform(modelViewMatrix: ModelViewMatrix) {
+        this._A.transform(modelViewMatrix);
+        this._B.transform(modelViewMatrix);
+        this._C.transform(modelViewMatrix);
     }
 }

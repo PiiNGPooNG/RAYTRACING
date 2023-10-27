@@ -1,5 +1,5 @@
 import Vector3 from "./Vector3.js";
-import Matrix from "./Matrix.js";
+import ModelViewMatrix from "./ModelViewMatrix.js";
 
 export default class Vertex {
     private _position: Vector3;
@@ -18,8 +18,8 @@ export default class Vertex {
         return this._normal;
     }
 
-    transform(transform: Matrix, normalTransform: Matrix) {
-        this._position = transform.transform(this._position);
-        this._normal = normalTransform.transformNormal(this._normal);
+    transform(modelViewMatrix: ModelViewMatrix) {
+        this._position = modelViewMatrix.modelView.transform(this._position);
+        this._normal = modelViewMatrix.normalModelView.transformNormal(this._normal);
     }
 }

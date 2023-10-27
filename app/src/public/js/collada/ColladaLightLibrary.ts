@@ -1,4 +1,4 @@
-import {DaeLight} from "./ColladaTypes";
+import {DaeColor, DaeLight} from "./ColladaTypes";
 
 export default class ColladaLightLibrary {
     lights: DaeLight[];
@@ -21,19 +21,27 @@ export default class ColladaLightLibrary {
         if (extraTechniqueEl && extraTechniqueEl.getAttribute("profile") == "blender") {
             energy = parseFloat(extraTechniqueEl.querySelector("energy").textContent);
         }
-        const color = techniqueEl.querySelector("color").textContent.split(" ").map(Number);
+        const colorArr = techniqueEl.querySelector("color").textContent.split(" ").map(Number);
+        let color: DaeColor = {
+            r: colorArr[0] / energy,
+            g: colorArr[1] / energy,
+            b: colorArr[2] / energy
+        }
         switch (techniqueEl.children[0].tagName) {
             case "point":
                 this.lights.push({
                     id: id,
                     type: "point",
-                    color: {
-                        r: color[0] / energy,
-                        g: color[1] / energy,
-                        b: color[2] / energy
-                    }
+                    color: color
                 });
                 break;
+
+            case "directional":
+                this.lights.push({
+                    id: id,
+                    type: "directional",
+                    color: color
+                })
         }
     }
 

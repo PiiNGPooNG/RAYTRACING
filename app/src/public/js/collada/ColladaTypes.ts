@@ -48,7 +48,7 @@ export interface DaeGeometry {
 
 export interface DaeLight {
     id: string;
-    type: "point";
+    type: "point" | "directional";
     color: DaeColor;
 }
 
