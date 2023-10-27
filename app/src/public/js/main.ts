@@ -1,7 +1,7 @@
 import Job from './Job';
 import Collada from "./collada/Collada.js";
 
-const collada = await Collada.fromPath("/3d/simple-scene.dae");
+const collada = await Collada.fromPath("/3d/donut.dae");
 
 const width = 640;
 const height = 360;
