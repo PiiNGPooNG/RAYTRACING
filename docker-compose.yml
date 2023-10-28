@@ -9,6 +9,4 @@ services:
       - ./app:/var/www
     ports:
       - "80:3000"
-    environment:
-      - NODE_ENV=production
     command: "npm run dev"
