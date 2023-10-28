@@ -42,7 +42,10 @@ export default class Renderer {
                 });
                 let intersection = ray.intersection;
                 if (intersection) {
+                    let triangleColor = ray.intersection.triangle.color;
                     let finalColor = new Color(0, 0, 0);
+                    let minColor = new Color(triangleColor.r * 0.2, triangleColor.g * 0.2, triangleColor.b * 0.2);
+                    finalColor.add(minColor);
                     for (const light of lights) {
                         let lightRay = light.getRay(intersection.position);
                         meshes.forEach((mesh) => {
@@ -53,7 +56,7 @@ export default class Renderer {
                         if (lightRay.intersection === undefined) {
                             let dot = lightRay.direction.angleTo(intersection.triangle.normal);
                             dot = Math.max(dot, 0);
-                            let color = ray.intersection.triangle.color.lightAtAngle(light.color, dot);
+                            let color = triangleColor.lightAtAngle(light.color, dot);
                             finalColor.add(color);
                         }
                     }
