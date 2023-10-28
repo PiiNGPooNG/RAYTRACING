@@ -46,7 +46,10 @@ jobs.reverse();
 
 //jobs.sort(() => Math.random() - 0.5);
 
-const workerAmount = 10;
+let unfinishedJobAmount = jobs.length;
+const startTime = Date.now();
+
+const workerAmount = 8;
 const workers: Array<Worker> = [];
 for (let i = 0; i < workerAmount; i++) {
     const worker = new Worker("/js/worker.js", {type: "module"});
@@ -61,6 +64,11 @@ for (let i = 0; i < workerAmount; i++) {
     worker.addEventListener("message", (message) => {
         let completedJob = message.data.completedJob;
         if (completedJob) {
+            if (--unfinishedJobAmount == 0) {
+                const stopTime = Date.now();
+                const timeTaken = stopTime - startTime;
+                console.log(timeTaken / 1000, "s");
+            }
             removeJobOutline(completedJob);
         }
         giveJob(worker);
