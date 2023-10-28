@@ -3,8 +3,8 @@ import Collada from "./collada/Collada.js";
 
 const collada = await Collada.fromPath("/3d/simple-scene.dae");
 
-const width = 640;
-const height = 360;
+const width = 854;
+const height = 480;
 const displayFactor = 1;
 
 const canvas = document.querySelector("canvas");
