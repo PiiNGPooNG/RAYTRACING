@@ -33,6 +33,10 @@ export default class ColladaEffectLibrary {
                         a: color[3]
                     }
                 }
+                const reflectivityEl = techniqueEl.querySelector("reflectivity");
+                if (reflectivityEl) {
+                    effect.properties.reflectivity = parseFloat(reflectivityEl.querySelector("float").textContent);
+                }
                 this.effects.push(effect);
                 break;
         }

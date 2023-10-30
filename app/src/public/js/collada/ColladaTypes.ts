@@ -74,6 +74,7 @@ export interface DaeEffect {
     type: "lambert";
     properties: {
         diffuse?: DaeColor;
+        reflectivity?: number;
     };
 }
 
