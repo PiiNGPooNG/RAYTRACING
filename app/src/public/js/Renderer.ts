@@ -1,5 +1,6 @@
 import Color from "./Color.js";
 import Scene from "./Scene.js";
+import Ray from "./Ray";
 
 let counter = 0;
 
@@ -8,7 +9,7 @@ export default class Renderer {
     readonly height: number;
     private readonly pixels: Uint8ClampedArray;
 
-    #scene: Scene;
+    private scene: Scene;
 
     constructor(width: number, height: number, buffer: SharedArrayBuffer) {
         this.width = width;
@@ -17,7 +18,7 @@ export default class Renderer {
     }
 
     setScene(scene: Scene) {
-        this.#scene = scene;
+        this.scene = scene;
     }
 
     pixel(x: number, y: number, color: Color): void {
@@ -29,40 +30,47 @@ export default class Renderer {
     }
 
     render(startX: number, startY: number, width: number, height: number) {
-        const meshes = this.#scene.meshes;
-        const lights = this.#scene.lights;
         for (let x = startX; x < startX + width; x++) {
             for (let y = startY; y < startY + height; y++) {
-                let ray = this.#scene.camera.getRay(x, y, this.width, this.height)
-
-                meshes.forEach((mesh) => {
-                    mesh.triangles.forEach((triangle) => {
-                       ray.calcIntersection(triangle);
-                    });
-                });
-                let intersection = ray.intersection;
-                if (intersection) {
-                    let triangleColor = ray.intersection.triangle.color;
-                    let finalColor = new Color(0, 0, 0);
-                    let minColor = new Color(triangleColor.r * 0.2, triangleColor.g * 0.2, triangleColor.b * 0.2);
-                    finalColor.add(minColor);
-                    for (const light of lights) {
-                        let lightRay = light.getRay(intersection.position);
-                        meshes.forEach((mesh) => {
-                            mesh.triangles.forEach((triangle) => {
-                                lightRay.calcIntersection(triangle);
-                            });
-                        })
-                        if (lightRay.intersection === undefined) {
-                            let dot = lightRay.direction.angleTo(intersection.triangle.normal);
-                            dot = Math.max(dot, 0);
-                            let color = triangleColor.lightAtAngle(light.color, dot);
-                            finalColor.add(color);
-                        }
-                    }
-                    this.pixel(x, y, finalColor);
-                }
+                let ray = this.scene.camera.getRay(x, y, this.width, this.height)
+                this.pixel(x, y, this.getColor(ray, 0));
             }
         }
+    }
+
+    getColor(ray: Ray, depth: number) {
+        const meshes = this.scene.meshes;
+        const lights = this.scene.lights;
+
+        for (const mesh of meshes) {
+            for (const triangle of mesh.triangles) {
+                ray.calcIntersection(triangle);
+            }
+        }
+
+        let intersection = ray.intersection;
+        if (intersection) {
+            let triangleColor = ray.intersection.triangle.color;
+            let finalColor = new Color(0, 0, 0);
+            let minColor = new Color(triangleColor.r * 0.2, triangleColor.g * 0.2, triangleColor.b * 0.2);
+            finalColor.add(minColor);
+            for (const light of lights) {
+                let lightRay = light.getRay(intersection.position);
+                meshes.forEach((mesh) => {
+                    mesh.triangles.forEach((triangle) => {
+                        lightRay.calcIntersection(triangle);
+                    });
+                })
+                if (lightRay.intersection === undefined) {
+                    let dot = lightRay.direction.angleTo(intersection.triangle.normal);
+                    dot = Math.max(dot, 0);
+                    let color = triangleColor.lightAtAngle(light.color, dot);
+                    finalColor.add(color);
+                }
+            }
+            return finalColor;
+        }
+
+        return new Color(0.53, 0.81, 0.92);
     }
 }
