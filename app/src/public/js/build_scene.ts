@@ -83,7 +83,6 @@ function getMeshes(visualScene: DaeVisualScene) {
     });
     for (const meshNode of meshNodes) {
         const transform = new Matrix(meshNode.matrix);
-        const normalTransform = transform.partial(3, 3).inverse().transpose();
         const instances = meshNode.instances.filter(instance => {
             return instance.type === "geometry";
         });
@@ -95,7 +94,7 @@ function getMeshes(visualScene: DaeVisualScene) {
                 if (effect.type === "lambert") {
                     const diffuse = effect.properties.diffuse;
                     const color = new Color(diffuse.r, diffuse.g, diffuse.b);
-                    const reflectivity = 0; // TODO: get this from scene
+                    const reflectivity = effect.properties.reflectivity ?? 0;
                     const material = new Material(color, reflectivity);
                     materialMap.set(materialNode.symbol, material);
                 }

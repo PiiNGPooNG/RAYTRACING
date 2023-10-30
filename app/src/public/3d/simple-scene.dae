@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 3.6.4 commit date:2023-09-25, commit time:13:24, hash:21bfc5e7fe3f</authoring_tool>
     </contributor>
-    <created>2023-10-28T10:51:04</created>
-    <modified>2023-10-28T10:51:04</modified>
+    <created>2023-10-30T14:24:38</created>
+    <modified>2023-10-30T14:24:38</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -196,6 +196,9 @@
             <diffuse>
               <color sid="diffuse">0.8000001 0.7059443 0 1</color>
             </diffuse>
+            <reflectivity>
+              <float sid="specular">0.5</float>
+            </reflectivity>
             <index_of_refraction>
               <float sid="ior">1.45</float>
             </index_of_refraction>
@@ -457,7 +460,7 @@
         </instance_geometry>
       </node>
       <node id="Cylinder" name="Cylinder" type="NODE">
-        <matrix sid="transform">1 0 0 0.6075171 0 1 0 1.488076 0 0 1 1 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 -2.397092 0 1 0 0.6934026 0 0 1 1 0 0 0 1</matrix>
         <instance_geometry url="#Cylinder-mesh" name="Cylinder">
           <bind_material>
             <technique_common>
@@ -493,11 +496,11 @@
         </instance_geometry>
       </node>
       <node id="Camera" name="Camera" type="NODE">
-        <matrix sid="transform">0.8517269 -0.3109431 0.421753 5.798385 0.523986 0.5054309 -0.6855497 -9.200503 -5.25092e-8 0.8048938 0.5934189 9.076566 0 0 0 1</matrix>
+        <matrix sid="transform">0.9191353 -0.05754817 0.3897158 5.357928 0.3939419 0.1342704 -0.9092751 -12.27635 -1.91992e-7 0.9892723 0.1460833 2.926461 0 0 0 1</matrix>
         <instance_camera url="#Camera-camera"/>
       </node>
       <node id="Cube" name="Cube" type="NODE">
-        <matrix sid="transform">1 0 0 -2.453732 0 1 0 0.4913475 0 0 1 1 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0.5934434 0 1 0 1.988117 0 0 1 1 0 0 0 1</matrix>
         <instance_geometry url="#Cube-mesh" name="Cube">
           <bind_material>
             <technique_common>

@@ -1,6 +1,7 @@
 import Color from "./Color.js";
 import Scene from "./Scene.js";
-import Ray from "./Ray";
+import Ray from "./Ray.js";
+import Matrix from "./Matrix.js";
 
 let counter = 0;
 
@@ -33,12 +34,12 @@ export default class Renderer {
         for (let x = startX; x < startX + width; x++) {
             for (let y = startY; y < startY + height; y++) {
                 let ray = this.scene.camera.getRay(x, y, this.width, this.height)
-                this.pixel(x, y, this.getColor(ray, 0));
+                this.pixel(x, y, this.getColor(ray, 1));
             }
         }
     }
 
-    getColor(ray: Ray, depth: number) {
+    getColor(ray: Ray, depth: number): Color {
         const meshes = this.scene.meshes;
         const lights = this.scene.lights;
 
@@ -49,28 +50,49 @@ export default class Renderer {
         }
 
         let intersection = ray.intersection;
-        if (intersection) {
-            let material = ray.intersection.triangle.material;
-            let finalColor = new Color(0, 0, 0);
-            let minColor = new Color(material.color.r * 0.2, material.color.g * 0.2, material.color.b * 0.2);
-            finalColor.add(minColor);
-            for (const light of lights) {
-                let lightRay = light.getRay(intersection.position);
-                meshes.forEach((mesh) => {
-                    mesh.triangles.forEach((triangle) => {
-                        lightRay.calcIntersection(triangle);
-                    });
-                })
-                if (lightRay.intersection === undefined) {
-                    let dot = lightRay.direction.angleTo(intersection.triangle.normal);
-                    dot = Math.max(dot, 0);
-                    let color = material.color.lightAtAngle(light.color, dot);
-                    finalColor.add(color);
-                }
-            }
-            return finalColor;
+
+        if (!intersection) {
+            return new Color(0.53, 0.81, 0.92);
         }
 
-        return new Color(0.53, 0.81, 0.92);
+        let material = ray.intersection.triangle.material;
+        let directColor = new Color(0, 0, 0);
+        let minColor = new Color(material.color.r * 0.2, material.color.g * 0.2, material.color.b * 0.2);
+        directColor.add(minColor);
+        for (const light of lights) {
+            let lightRay = light.getRay(intersection.position);
+            for (const mesh of meshes) {
+                for (const triangle of mesh.triangles) {
+                    lightRay.calcIntersection(triangle);
+                }
+            }
+            if (lightRay.intersection === undefined) {
+                let dot = lightRay.direction.angleTo(intersection.triangle.normal);
+                dot = Math.max(dot, 0);
+                let color = material.color.lightAtAngle(light.color, dot);
+                directColor.add(color);
+            }
+        }
+
+        if (depth >= 5 || material.reflectivity <= 0) {
+            return directColor;
+        }
+
+        const identity = Matrix.identity(3);
+        const normalAsMatrix = Matrix.fromVector(intersection.triangle.normal);
+        const reflector = identity.add(normalAsMatrix.mult(normalAsMatrix.transpose()).scalarMult(-2));
+        const reflectionDirection = reflector.mult(Matrix.fromVector(ray.direction)).asVector();
+        const reflectionRay = new Ray(intersection.position, reflectionDirection);
+
+        const reflectionColor = this.getColor(reflectionRay, depth + 1);
+
+        const reflectivity = material.reflectivity;
+        const nonReflectivity = 1 - reflectivity;
+
+        return new Color(
+            directColor.r * nonReflectivity + reflectionColor.r * reflectivity,
+            directColor.g * nonReflectivity + reflectionColor.g * reflectivity,
+            directColor.b * nonReflectivity + reflectionColor.b * reflectivity,
+        )
     }
 }

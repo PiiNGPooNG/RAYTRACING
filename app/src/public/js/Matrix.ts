@@ -31,6 +31,10 @@ export default class Matrix {
         return new Matrix(matrix);
     }
 
+    static fromVector(vector: Vector3) {
+        return Matrix.from1D(vector.asArray(), 3, 1);
+    }
+
     static identity(n: number) {
         let outRaw: number[][] = [];
         for (let i = 0; i < n; i++) {
@@ -60,6 +64,27 @@ export default class Matrix {
         return this.matrix;
     }
 
+    asVector(): Vector3 {
+        if (this.m != 3 || this.n != 1) {
+            throw new Error("Can't get Vector3 from this Matrix");
+        }
+        return new Vector3(this.matrix[0][0], this.matrix[1][0], this.matrix[2][0]);
+    }
+
+    add(other: Matrix) {
+        if (this.m != other.m || this.n != other.n) {
+            throw new Error("Incompatible matrices for addition");
+        }
+        let matrix = [];
+        for (let i = 0; i < this.m; i++) {
+            matrix[i] = [];
+            for (let j = 0; j < this.n; j++) {
+                matrix[i][j] = this.matrix[i][j] + other.matrix[i][j];
+            }
+        }
+        return new Matrix(matrix);
+    }
+
     mult(other: Matrix) {
         if (this.n != other.m) {
             throw new Error("Incompatible matrices for multiplication");
@@ -76,6 +101,11 @@ export default class Matrix {
             }
         }
         return new Matrix(outRaw);
+    }
+
+    scalarMult(scalar: number) {
+        let matrix = this.matrix.map(row => row.map(cell => cell * scalar));
+        return new Matrix(matrix);
     }
 
     inverse() {

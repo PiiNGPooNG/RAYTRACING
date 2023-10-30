@@ -6,6 +6,10 @@ export default class Vector3 {
         return new Vector3(array[0], array[1], array[2]);
     }
 
+    asArray(): number[] {
+        return [this.x, this.y, this.z];
+    }
+
     add(other: Vector3): Vector3 {
         return new Vector3(this.x + other.x, this.y + other.y, this.z + other.z);
     }
