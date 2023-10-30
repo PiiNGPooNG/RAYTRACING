@@ -1,4 +1,4 @@
-import Color from "./Color.js";
+import Material from "./Material.js";
 import Vertex from "./Vertex.js";
 import ModelViewMatrix from "./ModelViewMatrix.js";
 
@@ -6,13 +6,13 @@ export default class Triangle {
     private _A: Vertex;
     private _B: Vertex;
     private _C: Vertex;
-    readonly color: Color;
+    readonly material: Material;
 
-    constructor(A: Vertex, B: Vertex, C: Vertex, color: Color) {
+    constructor(A: Vertex, B: Vertex, C: Vertex, material: Material) {
         this._A = A;
         this._B = B;
         this._C = C;
-        this.color = color;
+        this.material = material;
     }
 
     get A(): Vertex {

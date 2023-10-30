@@ -12,12 +12,13 @@ import OrthoCamera from "./OrthoCamera.js";
 import PerspectiveCamera from "./PerspectiveCamera.js";
 import {DaeFull, DaeVisualScene} from "./collada/ColladaTypes";
 import {Light} from "./types";
+import Material from "./Material.js";
 
 
 let collada: Collada;
 let scene: Scene;
 
-const defaultColor = new Color(0.5, 0.5, 0.5);
+const defaultMaterial = new Material(new Color(0.5, 0.5, 0.5), 0);
 
 export function getScene(object: DaeFull) {
     collada = Collada.fromObject(object)
@@ -88,28 +89,30 @@ function getMeshes(visualScene: DaeVisualScene) {
         });
         for (const instance of instances) {
             const geometry = collada.getGeometry(instance.url);
-            const materialMap = new Map();
-            for (const material of instance.materials ?? []) {
-                const effect = collada.getEffectByMaterial(material.target);
+            const materialMap = new Map<string, Material>();
+            for (const materialNode of instance.materials ?? []) {
+                const effect = collada.getEffectByMaterial(materialNode.target);
                 if (effect.type === "lambert") {
                     const diffuse = effect.properties.diffuse;
                     const color = new Color(diffuse.r, diffuse.g, diffuse.b);
-                    materialMap.set(material.symbol, color);
+                    const reflectivity = 0; // TODO: get this from scene
+                    const material = new Material(color, reflectivity);
+                    materialMap.set(materialNode.symbol, material);
                 }
             }
-            for (const triangles of geometry.triangles) {
-                const inputCount = triangles.inputs.length;
-                const color = materialMap.get(triangles.material) ?? defaultColor;
-                const vertexInput = triangles.inputs.find(input => input.semantic === "VERTEX");
+            for (const trianglesNode of geometry.triangles) {
+                const inputCount = trianglesNode.inputs.length;
+                const material = materialMap.get(trianglesNode.material) ?? defaultMaterial;
+                const vertexInput = trianglesNode.inputs.find(input => input.semantic === "VERTEX");
                 const vertices = geometry.sources.find(source => source.id === vertexInput.source).data;
-                const normalInput = triangles.inputs.find(input => input.semantic === "NORMAL");
+                const normalInput = trianglesNode.inputs.find(input => input.semantic === "NORMAL");
                 const normals = geometry.sources.find(source => source.id === normalInput.source).data;
-                const indices = triangles.indices;
+                const indices = trianglesNode.indices;
 
-                const actualTriangles: Triangle[] = [];
-                for (let i = 0; i < triangles.count; i++) {
+                const triangles: Triangle[] = [];
+                for (let i = 0; i < trianglesNode.count; i++) {
                     const index = i * 3 * inputCount;
-                    actualTriangles.push(new Triangle(
+                    triangles.push(new Triangle(
                         new Vertex(
                             Vector3.fromArray(vertices[indices[index + vertexInput.offset]]),
                             Vector3.fromArray(normals[indices[index + normalInput.offset]])
@@ -122,10 +125,10 @@ function getMeshes(visualScene: DaeVisualScene) {
                             Vector3.fromArray(vertices[indices[index + inputCount * 2 + vertexInput.offset]]),
                             Vector3.fromArray(normals[indices[index + inputCount * 2 + normalInput.offset]])
                         ),
-                        color
+                        material
                     ));
                 }
-                const mesh = new Mesh(actualTriangles, transform);
+                const mesh = new Mesh(triangles, transform);
                 meshes.push(mesh);
             }
         }
