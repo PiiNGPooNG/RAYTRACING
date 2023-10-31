@@ -6,6 +6,11 @@ export default class Vector3 {
         return new Vector3(array[0], array[1], array[2]);
     }
 
+    static asNormal(x: number, y: number, z: number): Vector3 {
+        let norm = Math.sqrt(x * x + y * y + z * z);
+        return new Vector3(x / norm, y / norm, z / norm);
+    }
+
     asArray(): number[] {
         return [this.x, this.y, this.z];
     }
