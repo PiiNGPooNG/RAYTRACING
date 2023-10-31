@@ -2,7 +2,7 @@ export default class Vector3 {
     constructor(readonly x: number, readonly y: number, readonly z: number) {
     }
 
-    static fromArray(array: Array<number>): Vector3 {
+    static fromArray(array: number[]): Vector3 {
         return new Vector3(array[0], array[1], array[2]);
     }
 

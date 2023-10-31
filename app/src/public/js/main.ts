@@ -29,7 +29,7 @@ const imageData = ctx.getImageData(0, 0, width, height);
 const pixels = new Uint8ClampedArray(sharedBuffer);
 
 const jobSize = 40;
-const jobs: Array<Job> = [];
+const jobs: Job[] = [];
 
 for (let x = 0; x < width; x += jobSize) {
     for (let y = 0; y < height; y += jobSize) {
@@ -50,7 +50,7 @@ let unfinishedJobAmount = jobs.length;
 const startTime = Date.now();
 
 const workerAmount = 8;
-const workers: Array<Worker> = [];
+const workers: Worker[] = [];
 for (let i = 0; i < workerAmount; i++) {
     const worker = new Worker("/js/worker.js", {type: "module"});
     worker.postMessage({
