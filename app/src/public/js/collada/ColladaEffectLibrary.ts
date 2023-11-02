@@ -31,11 +31,25 @@ export default class ColladaEffectLibrary {
                         g: color[1],
                         b: color[2],
                         a: color[3]
-                    }
+                    };
                 }
                 const reflectivityEl = techniqueEl.querySelector("reflectivity");
                 if (reflectivityEl) {
                     effect.properties.reflectivity = parseFloat(reflectivityEl.querySelector("float").textContent);
+                }
+                const iorEl = techniqueEl.querySelector("index_of_refraction");
+                if (iorEl) {
+                    effect.properties.ior = parseFloat(iorEl.querySelector("float").textContent);
+                }
+                const transparentEl = techniqueEl.querySelector("transparent");
+                if (transparentEl) {
+                    const color = transparentEl.querySelector("color").textContent.split(" ").map(Number);
+                    effect.properties.transparent = {
+                        r: color[0],
+                        g: color[1],
+                        b: color[2],
+                        a: color[3]
+                    };
                 }
                 this.effects.push(effect);
                 break;
@@ -43,8 +57,6 @@ export default class ColladaEffectLibrary {
     }
 
     getById(id: string) {
-        return this.effects.find(effect => {
-            return effect.id === id;
-        });
+        return this.effects.find(effect => effect.id === id);
     }
 }

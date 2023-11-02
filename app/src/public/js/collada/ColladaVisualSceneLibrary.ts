@@ -85,8 +85,6 @@ export default class ColladaVisualSceneLibrary {
     }
 
     getById(id: string) {
-        return this.visualScenes.find(visualScene => {
-           return visualScene.id === id;
-        });
+        return this.visualScenes.find(visualScene => visualScene.id === id);
     }
 }

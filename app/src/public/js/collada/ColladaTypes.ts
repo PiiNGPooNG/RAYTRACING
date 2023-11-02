@@ -75,6 +75,8 @@ export interface DaeEffect {
     properties: {
         diffuse?: DaeColor;
         reflectivity?: number;
+        transparent?: DaeColor;
+        ior?: number;
     };
 }
 

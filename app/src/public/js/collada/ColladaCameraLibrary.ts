@@ -50,8 +50,6 @@ export default class ColladaCameraLibrary {
     }
 
     getById(id: string) {
-        return this.cameras.find(camera => {
-            return camera.id === id;
-        });
+        return this.cameras.find(camera => camera.id === id);
     }
 }

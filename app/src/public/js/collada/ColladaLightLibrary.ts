@@ -46,8 +46,6 @@ export default class ColladaLightLibrary {
     }
 
     getById(id: string) {
-        return this.lights.find(light => {
-            return light.id === id;
-        });
+        return this.lights.find(light => light.id === id);
     }
 }

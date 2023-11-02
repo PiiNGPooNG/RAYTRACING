@@ -24,8 +24,6 @@ export default class ColladaMaterialLibrary {
     }
 
     getById(id: string) {
-        return this.materials.find(material => {
-            return material.id === id;
-        });
+        return this.materials.find(material => material.id === id);
     }
 }

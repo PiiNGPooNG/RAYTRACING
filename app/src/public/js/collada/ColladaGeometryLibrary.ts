@@ -82,8 +82,6 @@ export default class ColladaGeometryLibrary {
     }
 
     getById(id: string) {
-        return this.geometries.find(geometry => {
-            return geometry.id === id;
-        });
+        return this.geometries.find(geometry => geometry.id === id);
     }
 }
