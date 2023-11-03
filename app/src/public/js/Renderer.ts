@@ -12,6 +12,7 @@ export default class Renderer {
 
     private scene: Scene;
 
+    private backgroundColor = new Color(0.53, 0.81, 0.92);
     constructor(width: number, height: number, buffer: SharedArrayBuffer) {
         this.width = width;
         this.height = height;
@@ -40,28 +41,47 @@ export default class Renderer {
     }
 
     getColor(ray: Ray, depth: number): Color {
-        const meshes = this.scene.meshes;
-        const lights = this.scene.lights;
-
-        for (const mesh of meshes) {
+        for (const mesh of this.scene.meshes) {
             for (const triangle of mesh.triangles) {
                 ray.calcIntersection(triangle);
             }
         }
-
-        let intersection = ray.intersection;
-
+        const intersection = ray.intersection;
         if (!intersection) {
-            return new Color(0.53, 0.81, 0.92);
+            return this.backgroundColor;
         }
 
-        let material = ray.intersection.triangle.material;
+        const directColor = this.getDirectColor(ray);
+        if (depth >= 5) {
+            return directColor;
+        }
+
+        let finalColor = directColor;
+        const material = intersection.triangle.material;
+
+        if (material.reflectivity > 0) {
+            const reflectionColor = this.getReflectedColor(ray, depth);
+            const reflectivity = material.reflectivity;
+            const nonReflectivity = 1 - reflectivity;
+            finalColor = new Color(
+                directColor.r * nonReflectivity + reflectionColor.r * reflectivity,
+                directColor.g * nonReflectivity + reflectionColor.g * reflectivity,
+                directColor.b * nonReflectivity + reflectionColor.b * reflectivity,
+            )
+        }
+
+        return finalColor;
+    }
+
+    private getDirectColor(ray: Ray) {
+        const intersection = ray.intersection;
+        let material = intersection.triangle.material;
         let directColor = new Color(0, 0, 0);
         let minColor = new Color(material.color.r * 0.2, material.color.g * 0.2, material.color.b * 0.2);
         directColor.add(minColor);
-        for (const light of lights) {
+        for (const light of this.scene.lights) {
             let lightRay = light.getRay(intersection.position);
-            for (const mesh of meshes) {
+            for (const mesh of this.scene.meshes) {
                 for (const triangle of mesh.triangles) {
                     lightRay.calcIntersection(triangle);
                 }
@@ -73,26 +93,16 @@ export default class Renderer {
                 directColor.add(color);
             }
         }
+        return directColor;
+    }
 
-        if (depth >= 5 || material.reflectivity <= 0) {
-            return directColor;
-        }
-
+    private getReflectedColor(ray: Ray, depth: number) {
+        const intersection = ray.intersection;
         const identity = Matrix.identity(3);
         const normalAsMatrix = Matrix.fromVector(intersection.triangle.normal);
         const reflector = identity.add(normalAsMatrix.mult(normalAsMatrix.transpose()).scalarMult(-2));
         const reflectionDirection = reflector.mult(Matrix.fromVector(ray.direction)).asVector();
         const reflectionRay = new Ray(intersection.position, reflectionDirection);
-
-        const reflectionColor = this.getColor(reflectionRay, depth + 1);
-
-        const reflectivity = material.reflectivity;
-        const nonReflectivity = 1 - reflectivity;
-
-        return new Color(
-            directColor.r * nonReflectivity + reflectionColor.r * reflectivity,
-            directColor.g * nonReflectivity + reflectionColor.g * reflectivity,
-            directColor.b * nonReflectivity + reflectionColor.b * reflectivity,
-        )
+        return this.getColor(reflectionRay, depth + 1);
     }
 }
