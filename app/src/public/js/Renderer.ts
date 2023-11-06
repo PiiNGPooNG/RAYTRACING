@@ -70,6 +70,17 @@ export default class Renderer {
             )
         }
 
+        if (material.transparency > 0) {
+            const refractionColor = this.getRefractedColor(ray, depth);
+            const transparency = material.transparency;
+            const opacity = 1 - transparency;
+            finalColor = new Color(
+                finalColor.r * opacity + refractionColor.r * transparency,
+                finalColor.g * opacity + refractionColor.g * transparency,
+                finalColor.b * opacity + refractionColor.b * transparency,
+            )
+        }
+
         return finalColor;
     }
 
@@ -104,5 +115,10 @@ export default class Renderer {
         const reflectionDirection = reflector.mult(Matrix.fromVector(ray.direction)).asVector();
         const reflectionRay = new Ray(intersection.position, reflectionDirection);
         return this.getColor(reflectionRay, depth + 1);
+    }
+
+    private getRefractedColor(ray: Ray, depth: number) {
+        // TODO
+        return new Color(0, 0, 0);
     }
 }

@@ -18,7 +18,7 @@ import Material from "./Material.js";
 let collada: Collada;
 let scene: Scene;
 
-const defaultMaterial = new Material(new Color(0.5, 0.5, 0.5), 0);
+const defaultMaterial = new Material(new Color(0.5, 0.5, 0.5), 0, 0, 1);
 
 export function getScene(object: DaeFull) {
     collada = Collada.fromObject(object)
@@ -95,7 +95,9 @@ function getMeshes(visualScene: DaeVisualScene) {
                     const diffuse = effect.properties.diffuse;
                     const color = new Color(diffuse.r, diffuse.g, diffuse.b);
                     const reflectivity = effect.properties.reflectivity ?? 0;
-                    const material = new Material(color, reflectivity);
+                    const transparency = 1 - (effect.properties.transparent?.a ?? 1);
+                    const ior = effect.properties.ior ?? 1;
+                    const material = new Material(color, reflectivity, transparency, ior);
                     materialMap.set(materialNode.symbol, material);
                 }
             }
