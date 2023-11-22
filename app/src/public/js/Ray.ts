@@ -4,6 +4,7 @@ export default class Ray {
     readonly origin: Vector3;
     readonly direction: Vector3;
     private _intersection: Intersection;
+    private _iorOfMedium: number = 1;
 
     constructor(origin: Vector3, direction: Vector3) {
         this.origin = origin;
@@ -15,10 +16,18 @@ export default class Ray {
         return new Ray(from, direction);
     }
 
+    set iorOfMedium(ior: number) {
+        this._iorOfMedium = Math.max(ior, 1);
+    }
+
+    get iorOfMedium() {
+        return this._iorOfMedium;
+    }
+
     calcIntersection(triangle: Triangle): void {
-        if (triangle.normal.dot(this.direction) > 0) {
-            return;
-        }
+        // if (triangle.normal.dot(this.direction) > 0) {
+        //     return;
+        // }
 
         let q = triangle.A.position.copy();
         let v = triangle.B.position.subtract(triangle.A.position);

@@ -11,8 +11,10 @@ export default class Renderer {
     private readonly pixels: Uint8ClampedArray;
 
     private scene: Scene;
+    private maxDepth: number = 10;
 
     private backgroundColor = new Color(0.53, 0.81, 0.92);
+
     constructor(width: number, height: number, buffer: SharedArrayBuffer) {
         this.width = width;
         this.height = height;
@@ -52,7 +54,7 @@ export default class Renderer {
         }
 
         const directColor = this.getDirectColor(ray);
-        if (depth >= 5) {
+        if (depth >= this.maxDepth) {
             return directColor;
         }
 
@@ -118,7 +120,34 @@ export default class Renderer {
     }
 
     private getRefractedColor(ray: Ray, depth: number) {
-        // TODO
-        return new Color(0, 0, 0);
+        const quotient = ray.iorOfMedium / ray.intersection.triangle.material.ior;
+        let normal = ray.intersection.triangle.normal;
+        if (ray.direction.dot(normal) > 0) {
+            normal = normal.negate();
+        }
+        const normalAsMatrix = Matrix.fromVector(normal);
+        const normalAsMatrixT = normalAsMatrix.transpose();
+        const p = normalAsMatrix.mult(normalAsMatrixT)
+            .scalarMult(1 / normalAsMatrixT.mult(normalAsMatrix).asArray[0][0])
+            .mult(Matrix.fromVector(ray.direction)).asVector();
+        const q = ray.direction.subtract(p);
+
+        const n0 = normal.normalized();
+        const x = q.multiplyBy(quotient);
+        const d = ray.direction.dot(ray.direction) - x.dot(x)
+
+        if (d >= 0) {
+            const ny = Math.sqrt(d);
+            const y = n0.multiplyBy(ny).negate();
+            const w = x.add(y);
+            const refractedRay = new Ray(ray.intersection.position, w);
+            refractedRay.iorOfMedium = ray.intersection.triangle.material.ior;
+            return this.getColor(refractedRay, depth + 1);
+        } else {
+            const v = q.multiplyBy(2).subtract(ray.direction);
+            const reflectedRay = new Ray(ray.intersection.position, v);
+            reflectedRay.iorOfMedium = ray.iorOfMedium;
+            return this.getColor(reflectedRay, depth + 1);
+        }
     }
 }
