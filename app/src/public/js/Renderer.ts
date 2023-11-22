@@ -61,7 +61,7 @@ export default class Renderer {
         let finalColor = directColor;
         const material = intersection.triangle.material;
 
-        if (material.reflectivity > 0) {
+        if (material.reflectivity > 0 && material.transparency < 1) {
             const reflectionColor = this.getReflectedColor(ray, depth);
             const reflectivity = material.reflectivity;
             const nonReflectivity = 1 - reflectivity;
