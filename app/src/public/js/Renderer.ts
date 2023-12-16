@@ -13,7 +13,7 @@ export default class Renderer {
     private scene: Scene;
     private maxDepth: number = 10;
 
-    private backgroundColor = new Color(0.53, 0.81, 0.92);
+    private backgroundColor = new Color(0.87, 0.85, 0.8);
 
     constructor(width: number, height: number, buffer: SharedArrayBuffer) {
         this.width = width;

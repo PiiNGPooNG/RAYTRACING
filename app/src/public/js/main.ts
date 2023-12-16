@@ -1,7 +1,7 @@
 import Job from './Job';
 import Collada from "./collada/Collada.js";
 
-const collada = await Collada.fromPath("/3d/guitar.dae");
+const collada = await Collada.fromPath("/3d/pedalboard.dae");
 
 const width = 854;
 const height = 480;
